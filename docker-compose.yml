@@ -1,0 +1,14 @@
+version: "3"
+services:
+    db:
+        image: mongo
+
+    web:
+        build: .
+        environment:
+            - port=80
+            - db=db
+        ports: 
+            - 80:80
+
+        

@@ -1,0 +1,38 @@
+{
+  "name": "simple",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "vue-cli-service build &node app",
+    "build": "vue-cli-service build",
+    "serve": "vue-cli-service serve",
+    "run": "node app",
+    "test": "node app\tests"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vue/cli-plugin-vuex": "^4.2.2",
+    "@vue/cli-service": "^4.2.2",
+    "body-parser": "^1.19.0",
+    "bootstrap": "^4.4.1",
+    "dateformat": "^3.0.3",
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "google-maps-api-loader": "^1.1.1",
+    "jquery": "^3.4.1",
+    "mongoose": "^5.8.9",
+    "popper.js": "^1.16.1",
+    "vue": "^2.6.11",
+    "vue-head": "^2.2.0",
+    "vue-template-compiler": "^2.6.11",
+    "vuex": "^3.1.2"
+  },
+  "devDependencies": {
+    "sass": "^1.26.1",
+    "sass-loader": "^8.0.2"
+  }
+}
