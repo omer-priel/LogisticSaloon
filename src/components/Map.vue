@@ -1,6 +1,6 @@
 <template>
     <div id="Map">
-        <HereMap 
+        <HereMapMarker 
           appId="FymdsOx1OInDIkWIBErG"
           appCode="i_LyBjYPh3K-ymfzPrpBPw"
           :lng="37.7397" 
@@ -11,13 +11,13 @@
 </template>
 
 <script>
-    import HereMap from "./HereMap.vue"
+    import HereMapMarker from "./HereMapMarker.vue"
 
     export default {
         name: 'Map',
 
         components: {
-            HereMap
+            HereMapMarker
         },
 
         data() {
