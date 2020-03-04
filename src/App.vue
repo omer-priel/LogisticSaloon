@@ -18,6 +18,12 @@
 
 <script>
 
+  require("./js/here/mapsjs-core.js");
+  require("./js/here/mapsjs-data.js");
+  require("./js/here/mapsjs-service.js");
+  require("./js/here/mapsjs-ui.js");
+  require("./js/here/mapsjs-mapevents.js");
+
   document.body.dir="rtl";
 
   import Cards from "./components/Cards.vue";
