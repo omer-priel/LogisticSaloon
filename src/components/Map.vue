@@ -64,6 +64,7 @@
             });
         },
         mounted() {
+            
             const defaultLayers = this.platform.createDefaultLayers();
             const mapOptions = {
                 zoom: 8,
@@ -72,13 +73,46 @@
 
             this.map = new H.Map(this.$refs.map, defaultLayers.normal.map, mapOptions);
 
+            let behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(this.map));
+
+            let ui = H.ui.UI.createDefault(this.map, defaultLayers, 'en-US');
+
+            ui.removeControl('mapsettings');
+
             this.events.forEach(item => {
-                this.addEvent(item.event);
-            })
+                let event = {
+                    id: item.event.id,
+                    data: item.event,
+                    map: {
+                        onClick() {
+                            console.log(this);
+                        }
+                    }
+                }
+                this.addEvent(event);
+            });
         },
         methods: {
             addEvent (event) {
-                let marker = new H.map.Marker(event.location);
+                let location = {
+                    lat: event.data.location.lat,
+                    lng: event.data.location.lng + 0.06
+                };
+
+                let iconUrl = require('../assets/img/speech-bubble.png');
+
+                let markerOptions = {
+                    icon: new H.map.Icon(iconUrl),
+                    data: event
+                };
+    
+                let marker = new H.map.Marker(location, markerOptions);
+
+                marker.addEventListener('tap', function(e) {
+                    let event = e.target.getData();
+                    event.map.onClick.call(event);
+                });
+                
                 this.map.addObject(marker);
             }
         }
