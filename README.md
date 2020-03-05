@@ -13,13 +13,9 @@ eventData: {
     event_type: String
     
     location: {
-
         lat: Number
-    
         lng: Number
-    
     }
-
 }
 
 event: {
