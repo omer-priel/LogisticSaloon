@@ -3,6 +3,7 @@
 # API
 
 eventData: {
+
     id: Number
     link: String
     content: String
@@ -11,6 +12,7 @@ eventData: {
         lat: Number
         lng: Number
     }
+    
 }
 
 event: {
