@@ -12,19 +12,14 @@ eventData: {
         lat: Number
         lng: Number
     }
-    
+
 }
 
 event: {
     
     id: Number
-    
     data: eventData
-    
     map: {
-    
         onClick: Function
-    
     }
-
 }
