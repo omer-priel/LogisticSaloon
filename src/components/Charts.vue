@@ -1,5 +1,5 @@
 <template>
-    <div id="Charts">
+    <div>
         
     </div>
 </template>
@@ -15,8 +15,8 @@ export default {
 }
 </script>
 
-<style lang="scss">
-    #Charts {
-        background-color: blue; 
+<style  lang="scss" scoped>
+    div {
+        background-color: blue;
     }
 </style>

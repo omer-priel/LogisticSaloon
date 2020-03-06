@@ -1,15 +1,15 @@
 <template>
-  <body id="App">
+  <body>
     <div class="container-fluid">
       <b-row>
         <b-col>
-          <Cards ref="cards" class="max_height" />
+          <Cards ref="cards" class="max_height"/>
         </b-col>
         <b-col>
-          <Map ref="map" class="max_height" />
+          <Map ref="map" class="max_height"/>
         </b-col>
         <b-col>
-          <Charts ref="charts" class="max_height" />
+          <Charts ref="charts" class="max_height"/>
         </b-col>
       </b-row>
     </div>
@@ -112,11 +112,9 @@
     }
 </script>
 
-<style  lang="scss">
-    #App {
-        .row > div {
-            padding-left: 0px;
-            padding-right: 0px;
-        }
+<style  lang="scss" scoped>
+    .row > div {
+        padding-left: 0px;
+        padding-right: 0px;
     }
 </style>
