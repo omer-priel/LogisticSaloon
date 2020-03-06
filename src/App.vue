@@ -1,19 +1,19 @@
 <template>
-    <body id="App">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-4">
-                    <Cards ref="cards" class="max_height" />
-                </div>
-                <div class="col-5">
-                    <Map ref="map" class="max_height" />
-                </div>
-                <div class="col-3">
-                    <Charts ref="charts" class="max_height" />
-                </div>
-            </div>
-        </div>
-    </body>
+  <body id="App">
+    <div class="container-fluid">
+      <b-row>
+        <b-col>
+          <Cards ref="cards" class="max_height" />
+        </b-col>
+        <b-col>
+          <Map ref="map" class="max_height" />
+        </b-col>
+        <b-col>
+          <Charts ref="charts" class="max_height" />
+        </b-col>
+      </b-row>
+    </div>
+  </body>
 </template>
 
 <script>

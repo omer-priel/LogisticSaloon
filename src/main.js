@@ -4,10 +4,11 @@ import VueHead from 'vue-head'
 import App from './App.vue'
 import store from './store'
 
-import bootstrap from 'bootstrap'
+import BootstrapVue from 'bootstrap-vue';
 
 import './assets/sass/main.scss'
  
+Vue.use(BootstrapVue);
 Vue.use(VueHead);
 
 Vue.config.productionTip = false;
