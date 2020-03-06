@@ -1,17 +1,17 @@
 <template>
   <body id="App">
     <div class="container-fluid">
-      <div class="row">
-        <div class="col-4">
+      <b-row>
+        <b-col>
           <Cards class="max_height" />
-        </div>
-        <div class="col-5">
+        </b-col>
+        <b-col>
           <Map class="max_height" />
-        </div>
-        <div class="col-3">
+        </b-col>
+        <b-col>
           <Charts class="max_height" />
-        </div>
-      </div>
+        </b-col>
+      </b-row>
     </div>
   </body>
 </template>
@@ -23,6 +23,8 @@
   import Cards from "./components/Cards.vue";
   import Map from "./components/Map.vue";
   import Charts from "./components/Charts.vue";
+
+
 
   export default {
     name: 'App',
