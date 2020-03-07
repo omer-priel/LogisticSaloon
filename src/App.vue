@@ -90,7 +90,7 @@
         mounted() {
             // test
             this.events.forEach(eventData => {
-                eventData.event.unit = "גדוד 4321";
+                eventData.event.from = "גדוד 4321";
                 eventData.event.date = new Date().getTime();
                 this.addEvent(eventData);
             });

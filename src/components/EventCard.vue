@@ -1,5 +1,5 @@
 <template>
-    <b-card align="right" :title="event.data.unit" :sub-title="`${event.data.date.getHours()}:${event.data.date.getMinutes()}`">
+    <b-card align="right" :title="event.data.from" :sub-title="`${event.data.date.getHours()}:${event.data.date.getMinutes()}`">
         <b-card-text>
             {{ event.data.content }}
         </b-card-text>

@@ -5,6 +5,8 @@
 eventData: {
 
     id: Number
+    date: Number
+    from: String
     link: String
     content: String
     event_type: String   
