@@ -7,7 +7,7 @@ import store from './store'
 import BootstrapVue from 'bootstrap-vue';
 
 import './assets/sass/main.scss'
- 
+
 Vue.use(BootstrapVue);
 Vue.use(VueHead);
 
