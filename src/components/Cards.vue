@@ -8,7 +8,7 @@
                 <b-card-body>
                     <b-card no-body v-for="(event, eventIndex) in group.events" :key="event">
                         <b-card-header class="p-1">
-                            <b-button block v-b-toggle="'event-' + eventIndex" >{{ eventIndex }}</b-button>
+                            <b-button block class="text-right" v-b-toggle="'event-' + eventIndex" >{{ sliceContent(event.data.content) }}</b-button>
                         </b-card-header>
                         <b-collapse :id="'event-' + eventIndex" :accordion="'group-' + groupIndex">
                             <b-card-body>
@@ -48,6 +48,11 @@
                     i = this.groups.push(group) - 1;
                 }
                 this.groups[i].events.push(event);
+            },
+            sliceContent(content) {
+                content = content.slice(0, 50);
+                let end = content.lastIndexOf(" ");
+                return content.slice(0, end);
             }
         }
     }
