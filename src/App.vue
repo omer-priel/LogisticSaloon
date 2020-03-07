@@ -91,23 +91,32 @@
         mounted() {
             // test
             this.events.forEach(eventData => {
+
+                eventData.event.from = "גדוד 4321";
+                eventData.event.date = new Date().getTime();
+
                 this.addEvent(eventData);
             });
         },
 
         methods: {
             addEvent(eventData) {
-                let data = eventData.event;
-                let event = {
-                    id: data.id,
-                    data: data,
-                    map: {
+            let data = eventData.event;
+            
+            data.date = new Date(data.date);
+
+            let event = {
+                id: data.id,
+                data: data,
+                map: {
                     onClick() {
                         console.log(this);
                     }
                 }
             };
+
             this.$refs.map.addEvent(event);
+            this.$refs.cards.addEvent(event);
           }
         }
     };
