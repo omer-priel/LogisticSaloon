@@ -107,6 +107,7 @@
                     }
                 }
                 this.$refs.map.addEvent(event);
+                this.$refs.cards.addEvent(event);
             }
         },
     }
