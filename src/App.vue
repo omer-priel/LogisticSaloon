@@ -1,15 +1,15 @@
 <template>
-  <body id="App">
+  <body>
     <div class="container-fluid">
       <b-row>
         <b-col>
-          <Cards ref="cards" class="max_height" />
+          <Cards ref="cards" class="max_height"/>
         </b-col>
         <b-col>
-          <Map ref="map" class="max_height" />
+          <Map ref="map" class="max_height"/>
         </b-col>
         <b-col>
-          <Charts ref="charts" class="max_height" />
+          <Charts ref="charts" class="max_height"/>
         </b-col>
       </b-row>
     </div>
@@ -90,14 +90,20 @@
         mounted() {
             // test
             this.events.forEach(eventData => {
+                eventData.event.unit = "גדוד 4321";
+                eventData.event.date = new Date().getTime();
                 this.addEvent(eventData);
             });
         },
 
         methods: {
-            addEvent(eventData) {
+            addEvent(eventData) {                
                 let data = eventData.event;
+
+                data.date = new Date(data.date);
+                
                 let event = {
+                    
                     id: data.id,
                     data: data,
                     map: {
@@ -107,16 +113,15 @@
                     }
                 }
                 this.$refs.map.addEvent(event);
+                this.$refs.cards.addEvent(event);
             }
         },
     }
 </script>
 
-<style  lang="scss">
-    #App {
-        .row > div {
-            padding-left: 0px;
-            padding-right: 0px;
-        }
+<style  lang="scss" scoped>
+    .row > div {
+        padding-left: 0px;
+        padding-right: 0px;
     }
 </style>
