@@ -80,7 +80,6 @@
     }
     #Charts {
         background-color: azure;
-        @include shadow();
     }
     .chart-box {
         @include border-radius(10px);
