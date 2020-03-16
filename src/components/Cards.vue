@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-card no-body v-for="(group, groupIndex) in groups" :key="group.title">
+        <b-card no-body v-for="(group, groupIndex) in groups.values()" :key="group.title">
             <b-card-header class="p-1">
                 <b-button block :variant="'group-' + groupIndex" v-b-toggle="'group-' + groupIndex">{{ group.title }}</b-button>
             </b-card-header>

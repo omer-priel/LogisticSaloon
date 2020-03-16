@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { stat } from 'fs';
 
 Vue.use(Vuex)
 
@@ -78,6 +77,54 @@ export default new Vuex.Store({
                     location: {
                         lat: 32.05020128541517,
                         lng: 34.75984151911165
+                    }
+                }
+            },
+            {
+                event: {
+                    id: 3,
+                    link: "https://www.hamal.co.il/post/-LncRYo2P--63J2Y6bZD",
+                    content: "הפנטגון אישר הערב שארצות הברית תקפה פעילי אל-קאעדה במחוז אידליב שבצפון-מערב סוריה, בה נהרגו לפחות 40 פעילים מפגיעת טילים. זאת לאחר ראמי עבד אל-רחמן, העומד בראש הארגון הסורי לזכויות אדם, הודיע כי \"תקיפת טילים כוונה נגד התכנסות שנערכה על ידי מנהיגי חוראס אל-דין, אנסאר אל-תאוויד וארגונים נוספים בתוך מחנה האימונים\".",
+                    event_type: "תקיפה בסוריה",
+                    location: {
+                        lat: 33.268782877555715,
+                        lng: 35.687669976351636
+                    }
+                }
+            },
+            {
+                event: {
+                    id: 4,
+                    link: "https://www.hamal.co.il/post/-LW1qTNj-HJdy6XrzSSy",
+                    content: "אבו עביידה: \" האוייב צריך להיות מודאג מאוד שאוצר המידע שקיבלנו יתן לנו עליונות אסטרטגית במלחמת המוחות. עזה היא ארץ אסורה לאוייב הציוני\"",
+                    event_type: "רצועת עזה",
+                    location: {
+                        lat: 32.0492021002358,
+                        lng: 34.76006502911327
+                    }
+                }
+            },
+            {
+                event: {
+                    id: 5,
+                    link: "https://www.hamal.co.il/post/-L_IrQ33K92yvXfy7egc",
+                    content: "דיווח ערבי: מטענים נזרקו לעבר כוחות צה\"ל בגבול רצועת עזה, צה\"ל הגיב בירי",
+                    event_type: "עימותים ברצועת עזה",
+                    location: {
+                        lat: 31.335510197502746,
+                        lng: 34.62111727462318
+                    }
+                }
+            },
+            {
+                event: {
+                    id: 9,
+                    link: "https://www.hamal.co.il/post/-LaU1bH_fwn3p66sy0Q3",
+                    content: "פלסטינים בהכנות לשיגור בלונים לעבר העוטף",
+                    event_type: "טרור העפיפונים ובלוני התבערה",
+                    location: {
+                        lat: 31.335462710203792,
+                        lng: 34.39537703542182
                     }
                 }
             }
@@ -174,7 +221,6 @@ export default new Vuex.Store({
             switch (sortBy) {
                 case "types": {
                     groups = state.groupsByTypes;
-                    
                 }
                 break;
                 case "territorials": {
@@ -240,7 +286,11 @@ export default new Vuex.Store({
     },
     getters: {
         getGroups(state) {
-            return state.groups.values();
+            return state.groups;
+        },
+
+        getGroupsByTypes(state) {
+            return state.groupsByTypes;
         },
 
         getColors(state) {
@@ -248,11 +298,7 @@ export default new Vuex.Store({
         },
 
         getEvents(state) {
-            return state.events.values();
-        },
-
-        getEvent(id) {
-            return state.events.get(id);
+            return state.events;
         },
     }
 });

@@ -51,10 +51,10 @@
                     ]
                 };
                 
-                let groups = store.getters.getGroups;
+                let groupsByTypes = store.getters.getGroupsByTypes.values();
                 let colors = store.getters.getColors;
 
-                for (const group of groups) {                    
+                for (const group of groupsByTypes) {                    
                     let color = colors[group.colorId];
                     let count = group.events.size;
 
@@ -63,8 +63,11 @@
                     datacollection.datasets[0].data.push(count);
                 }
 
+                // Temporary: for see the colors
                 if (datacollection.labels.length == 0) {
-                    
+                    datacollection.labels = ["נפגעים", "חוסר במים", "חוסר בתחמושת", "חתולים", "אובדנים"];
+                    datacollection.datasets[0].backgroundColor = colors;
+                    datacollection.datasets[0].data = [1,1,1,1,1];
                 }
 
                 this.datacollection = datacollection;

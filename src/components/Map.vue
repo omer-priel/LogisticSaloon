@@ -52,7 +52,7 @@
 
             load() {
                 let events = store.getters.getEvents;
-                for (event of events) {
+                for (event of events.values()) {
                     this.addEvent(event);
                 }
             },
