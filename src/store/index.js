@@ -3,6 +3,22 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
+function createEvent(data) {
+    data.date = new Date(data.date);
+    
+	let event = {
+		id: data.id,
+        data: data,
+        
+        selected: false,
+
+        // click
+        // selected = !selected;
+    };
+    
+    return event;
+}
+
 export default new Vuex.Store({
     state: {
         events: [
@@ -50,16 +66,33 @@ export default new Vuex.Store({
         ]
     },
     mutations: {
+        loadEvents(state) {
+            for (let i = 0; i < state.events.length; i++) {
 
+                // Temporary: need to get from the jsons.
+                let event = state.events[i].event;
+
+                // Temporary: need to get from the jsons.
+                event.from = "גדוד 4321";
+                // create random date
+                event.date = new Date().getTime();
+                
+                state.events[i] = createEvent(event);
+            }
+        },
     },
     actions: {
+        loadEvents(context) {
+            context.commit("loadEvents"); 
+        },
 
+        click(con)
     },
     modules: {
 
     },
     getters: {
-        getEvents(){
+        getEvents(state) {
             return state.events;
         }
     }

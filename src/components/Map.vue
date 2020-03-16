@@ -16,6 +16,9 @@
             return {
                 map: {},
                 platform: {},
+                events: {
+
+                }
             };
         },
         created() {
@@ -41,7 +44,7 @@
             ui.removeControl('mapsettings');
         },
         methods: {
-            addEvent (event) {
+            addEvent(event) {
                 let location = {
                     lat: event.data.location.lat,
                     lng: event.data.location.lng + 0.06
