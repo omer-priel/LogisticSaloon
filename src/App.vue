@@ -11,7 +11,7 @@
 				<router-view id="view" />
 			</b-col>
 			<b-col cols="8">
-				<Map ref="map" class="max_height" />
+				<Map class="max_height" />
 			</b-col>
 		</b-row>
 	</b-container>

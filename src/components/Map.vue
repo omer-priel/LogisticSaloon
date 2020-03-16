@@ -5,6 +5,8 @@
 </template>
 
 <script>
+
+    import store from '../store';
     import config from "../js/config";
 
     export default {
@@ -16,9 +18,7 @@
             return {
                 map: {},
                 platform: {},
-                events: {
-
-                }
+                groups: {},
             };
         },
         created() {
@@ -42,6 +42,8 @@
             let ui = H.ui.UI.createDefault(this.map, defaultLayers, 'en-US');
 
             ui.removeControl('mapsettings');
+
+            this.groups = store.getters.getGroups;
         },
         methods: {
             addEvent(event) {
@@ -61,7 +63,7 @@
 
                 marker.addEventListener('tap', function(e) {
                     let event = e.target.getData();
-                    event.map.onClick.call(event);
+                    console.log(event);
                 });
                 
                 this.map.addObject(marker);

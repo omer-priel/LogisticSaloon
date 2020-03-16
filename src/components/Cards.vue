@@ -20,13 +20,11 @@
 <script>
     import store from "../store";
 
-    import EventCard from "./EventCard";
-
     export default {
         name: 'Cards',
         
         components: {
-            EventCard
+            
         },
 
         data() {

@@ -102,24 +102,15 @@ export default new Vuex.Store({
             let territorials = [
                 {
                     title: "פיקוד צפון",
-                    centerLocation: {
-                        lat: 31.313430926637704,
-                        lng: 34.5967077351318
-                    },
+                    centerLocation: { lat: 31.2, lng: 34.8 },
                 },
                 {
                     title: "פיקוד מרכז",
-                    centerLocation: {
-                        lat: 31.313430926637704,
-                        lng: 34.5967077351318
-                    },
+                    centerLocation: { lat: 31.2, lng: 34.8 }
                 },
                 {
                     title: "פיקוד דרום",
-                    centerLocation: {
-                        lat: 31.313430926637704,
-                        lng: 34.5967077351318
-                    },
+                    centerLocation: { lat: 31.2, lng: 34.8 }
                 },
             ];
 
