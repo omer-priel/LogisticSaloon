@@ -2,19 +2,14 @@
     <div>
         <b-card no-body v-for="(group, groupIndex) in groups" :key="group">
             <b-card-header class="p-1">
-                <b-button block variant="primary" v-b-toggle="'group-' + groupIndex" >{{ group.title }}</b-button>
+                <b-button block variant="primary" :cast="group">{{ group.title }}</b-button>
             </b-card-header>
-            <b-collapse :id="'group-' + groupIndex" accordion="main">
+            <b-collapse accordion="groups">
                 <b-card-body>
-                    <b-card no-body v-for="(event, eventIndex) in group.events" :key="event">
+                    <b-card no-body v-for="event in group.events.values()" :key="event">
                         <b-card-header class="p-1">
-                            <b-button block class="text-right" v-b-toggle="'event-' + eventIndex" >{{ sliceContent(event.data.content) }}</b-button>
+                            <b-button block class="text-right" >{{ event }}</b-button>
                         </b-card-header>
-                        <b-collapse :id="'event-' + eventIndex" :accordion="'group-' + groupIndex">
-                            <b-card-body>
-                                <EventCard :event="event" />
-                            </b-card-body>
-                        </b-collapse>
                     </b-card>
                 </b-card-body>
             </b-collapse>
@@ -23,36 +18,42 @@
 </template>
 
 <script>
+    import store from "../store";
+
     import EventCard from "./EventCard";
 
     export default {
         name: 'Cards',
+        
         components: {
             EventCard
         },
+
         data() {
             return {
-                groupsTitles: [],
-                groups: []
+                groups: [],
+                tagIdCount: -1,
             };
         },
+
+        mounted() {
+            this.groups = store.getters.getGroups;
+        },
+
         methods: {
-            addEvent(event) {
-                let i = this.groupsTitles.indexOf(event.data.event_type);
-                if (i == -1) {
-                    this.groupsTitles.push(event.data.event_type);
-                    let group = {
-                        title: event.data.event_type,
-                        events: [],
-                    };
-                    i = this.groups.push(group) - 1;
-                }
-                this.groups[i].events.push(event);
-            },
             sliceContent(content) {
                 content = content.slice(0, 50);
                 let end = content.lastIndexOf(" ");
                 return content.slice(0, end);
+            },
+
+            addTagId() {
+                this.tagIdCount++;
+                let tagId = "id_" + this.tagIdCount;
+                return tagId;
+            },
+            lastTagId() {
+                return "id_" + this.tagIdCount;
             }
         }
     }

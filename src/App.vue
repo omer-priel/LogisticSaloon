@@ -27,6 +27,8 @@
 
 	document.body.dir = "rtl";
 
+	import { mapActions } from "vuex";
+
 	import Map from "./components/Map.vue";
 
 	export default {
@@ -42,20 +44,13 @@
 		},
 
 		mounted() {
-			this.loadEvents();
+			this.load();
 		},
 
 		methods: {
 			...mapActions([
-				"loadEvents"
+				"load"
 				]),
-
-			addEvent(eventData) {
-				let data = eventData.event;
-
-				this.$refs.map.addEvent(event);
-				this.$refs.cards.addEvent(event);
-			}
 		}
 	};
 </script>
