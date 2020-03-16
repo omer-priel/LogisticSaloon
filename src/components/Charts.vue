@@ -63,6 +63,10 @@
                     datacollection.datasets[0].data.push(count);
                 }
 
+                if (datacollection.labels.length == 0) {
+                    
+                }
+
                 this.datacollection = datacollection;
             },
         }
