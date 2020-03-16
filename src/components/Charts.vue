@@ -7,13 +7,6 @@
         </b-navbar>
         <div class="chart-box">
         <PieChart :chart-data="datacollection"/>
-        <b-button
-            style="margin: 10px"
-            size="sm"
-            variant="outline-primary"
-            @click="fillData()">
-            רענן
-            </b-button>
         </div>
     </div>
 </template>
@@ -61,13 +54,6 @@
                     datacollection.labels.push(group.title);
                     datacollection.datasets[0].backgroundColor.push(color);
                     datacollection.datasets[0].data.push(count);
-                }
-
-                // Temporary: for see the colors
-                if (datacollection.labels.length == 0) {
-                    datacollection.labels = ["נפגעים", "חוסר במים", "חוסר בתחמושת", "חתולים", "אובדנים"];
-                    datacollection.datasets[0].backgroundColor = colors;
-                    datacollection.datasets[0].data = [1,1,1,1,1];
                 }
 
                 this.datacollection = datacollection;
