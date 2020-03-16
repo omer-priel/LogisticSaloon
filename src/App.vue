@@ -11,7 +11,7 @@
 				<router-view id="view" />
 			</b-col>
 			<b-col cols="8">
-				<Map class="max_height" />
+				<Map ref="map" class="max_height" />
 			</b-col>
 		</b-row>
 	</b-container>
@@ -19,12 +19,6 @@
 </template>
 
 <script>
-	require("./js/here/mapsjs-core.js");
-	require("./js/here/mapsjs-data.js");
-	require("./js/here/mapsjs-service.js");
-	require("./js/here/mapsjs-ui.js");
-	require("./js/here/mapsjs-mapevents.js");
-
 	document.body.dir = "rtl";
 
 	import { mapActions } from "vuex";
@@ -45,6 +39,7 @@
 
 		mounted() {
 			this.load();
+			this.$refs.map.load();
 		},
 
 		methods: {

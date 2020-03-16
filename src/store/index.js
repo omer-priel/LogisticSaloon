@@ -4,7 +4,7 @@ import { stat } from 'fs';
 
 Vue.use(Vuex)
 
-function createEvent(data) {
+function createEvent(data, colorId) {
     //make clone
     data = {...data};
     
@@ -15,6 +15,7 @@ function createEvent(data) {
 
         // data fields
         data: data,
+        colorId: colorId,
         map: {},
         
         // event fields
@@ -82,6 +83,14 @@ export default new Vuex.Store({
             }
         ],
 
+        colors: [
+            "#26c485",
+            "#99cdfe",
+            "#e9e39b",
+            "#fd9a82",
+            "#7796cb",
+        ],
+
         // id => event
         events: new Map(),
 
@@ -129,17 +138,19 @@ export default new Vuex.Store({
                 eventData.date = new Date().getTime();
                 
                 // create the event
-                let event = createEvent(eventData);
+                let eventType = eventData.event_type;
+                if (!state.groupsByTypes.has(eventType)) {
+                    createGroup(state.groupsByTypes, eventType);
+                }
+                let groupByType = state.groupsByTypes.get(eventType);
+                
+                let event = createEvent(eventData, groupByType.colorId);
                 let eventId = event.data.id;
                 
                 // save the event
                 state.events.set(eventId, event);
                 
-                let eventType = event.data.event_type;
-                if (!state.groupsByTypes.has(eventType)) {
-                    createGroup(state.groupsByTypes, eventType);
-                }
-                state.groupsByTypes.get(eventType).events.set(eventId, event);
+                groupByType.events.set(eventId, event);
             
                 // Temporary: need real sort by location
                 let randomTerritorial = Math.floor(Math.random() * 3);
@@ -155,7 +166,10 @@ export default new Vuex.Store({
          * @param {String} sortBy - sort by "types" / "territorials".
          * @param {String} filter_title - filter by title or null for all
          */
-        groupsFilter(state, sortBy, filter_title) {
+        groupsFilter(state, args) {
+            let sortBy = args[0];
+            let filterTitle = args[1];
+
             let groups;
             switch (sortBy) {
                 case "types": {
@@ -172,17 +186,20 @@ export default new Vuex.Store({
                     return;
                 }
             }
-            if (filter_title) {
+            if (filterTitle) {
                 let group = new Map();
-                group.set(filter_title, groups.get(filter_title));
+                group.set(filter_title, groups.get(filterTitle));
                 groups = group;
             }
 
             state.groups = groups;
         },
         
-        toggleOpen(state, id, opend) {
-            state.events.get(id).opend = opend;
+        toggleEvent(state, args) {
+            let id = args[0];
+            let opened = args[1];
+            
+            state.events.get(id).opened = opened;
         },
     },
     actions: {
@@ -193,28 +210,28 @@ export default new Vuex.Store({
 
         // sorts and filters
         sortByTypes(context) {
-            context.commit("groupsFilter", "types", null);
+            context.commit("groupsFilter", ["types", null]);
         },
 
         filterByType(context, type_title) {
-            context.commit("groupsFilter", "types", type_title);
+            context.commit("groupsFilter", ["types", type_title]);
         },
 
         sortByTerritorials(context) {
-            context.commit("groupsFilter", "territorials", null); 
+            context.commit("groupsFilter", ["territorials", null]); 
         },
 
         filterByTerritorial(context, territorial_title) {
-            context.commit("groupsFilter", "territorials", territorial_title);
+            context.commit("groupsFilter", ["territorials", territorial_title]);
         },
 
         // on event
-        open(context, id) {
-            context.commit("toggleOpen", id, true);
+        openEvent(context, id) {
+            context.commit("toggleEvent", [id, true]);
         },
 
-        close(content, id) {
-            context.commit("toggleOpen", id, false);
+        closeEvent(content, id) {
+            context.commit("toggleEvent", [id, false]);
         },
 
     },
@@ -226,8 +243,16 @@ export default new Vuex.Store({
             return state.groups.values();
         },
 
+        getColors(state) {
+            return state.colors;
+        },
+
+        getEvents(state) {
+            return state.events.values();
+        },
+
         getEvent(id) {
             return state.events.get(id);
-        }
+        },
     }
 });

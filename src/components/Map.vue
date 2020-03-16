@@ -6,6 +6,8 @@
 
 <script>
 
+    import { mapActions } from "vuex";
+
     import store from '../store';
     import config from "../js/config";
 
@@ -17,8 +19,7 @@
         data() {
             return {
                 map: {},
-                platform: {},
-                groups: {},
+                platform: {}
             };
         },
         created() {
@@ -42,29 +43,39 @@
             let ui = H.ui.UI.createDefault(this.map, defaultLayers, 'en-US');
 
             ui.removeControl('mapsettings');
-
-            this.groups = store.getters.getGroups;
         },
+        
         methods: {
-            addEvent(event) {
+            ...mapActions([
+                "openEvent"
+            ]),
+
+            load() {
+                let events = store.getters.getEvents;
+                for (event of events) {
+                    this.addEvent(event);
+                }
+            },
+
+            addEvent(event) {                
                 let location = {
                     lat: event.data.location.lat,
                     lng: event.data.location.lng + 0.06
                 };
 
-                let iconUrl = require('../assets/img/speech-bubble.png');
+                let iconUrl = require('../assets/img/bubble-' + event.colorId + '.png');
 
                 let markerOptions = {
                     icon: new H.map.Icon(iconUrl),
-                    data: event
+                    data: event.id
                 };
     
                 let marker = new H.map.Marker(location, markerOptions);
 
                 marker.addEventListener('tap', function(e) {
-                    let event = e.target.getData();
-                    console.log(event);
-                });
+                    let eventId = e.target.getData();
+                    this.openEvent(eventId);
+                }.bind(this));
                 
                 this.map.addObject(marker);
             }

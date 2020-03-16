@@ -19,6 +19,8 @@
 </template>
 
 <script>
+    import store from "../store";
+    
     import PieChart from "../assets/js/PieChart.js";
 
     export default {
@@ -27,7 +29,10 @@
         },
         data() {
             return {
-                datacollection: null
+                datacollection: {
+                    labels: [],
+                    datasets: [],
+                }
             };
         },
         mounted() {
@@ -35,32 +40,31 @@
         },
         methods: {
             fillData() {
-                this.datacollection = {
-                    labels: ["נפגעים", "חוסר במים", "חוסר בתחמושת", "חתולים", "אובדנים"],
+                let datacollection = {
+                    labels: [],
                     datasets: [
                         {
                             label: "גרף מידע",
-                            backgroundColor: [
-                                "rgba(38, 196, 133, 1)",
-                                "rgba(153, 205, 254, 1)",
-                                "rgba(233, 227, 155, 1)",
-                                "rgba(253, 154, 130, 1)",
-                                "rgba(119, 150, 203, 1)"
-                            ],
-                            data: [
-                                this.getRandomInt(),
-                                this.getRandomInt(),
-                                this.getRandomInt(),
-                                this.getRandomInt(),
-                                this.getRandomInt()
-                            ]
+                            backgroundColor: [],
+                            data: [],
                         }
                     ]
                 };
+                
+                let groups = store.getters.getGroups;
+                let colors = store.getters.getColors;
+
+                for (const group of groups) {                    
+                    let color = colors[group.colorId];
+                    let count = group.events.size;
+
+                    datacollection.labels.push(group.title);
+                    datacollection.datasets[0].backgroundColor.push(color);
+                    datacollection.datasets[0].data.push(count);
+                }
+
+                this.datacollection = datacollection;
             },
-            getRandomInt() {
-                return Math.floor(Math.random() * (50 - 5 + 1)) + 5;
-            }
         }
     };
 </script>
