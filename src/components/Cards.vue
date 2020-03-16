@@ -1,14 +1,14 @@
 <template>
     <div>
-        <b-card no-body v-for="(group, groupIndex) in groups" :key="group">
+        <b-card no-body v-for="(group, groupIndex) in groups" :key="group.title">
             <b-card-header class="p-1">
-                <b-button block variant="primary" :cast="group">{{ group.title }}</b-button>
+                <b-button block variant="primary" v-b-toggle="'group-' + groupIndex">{{ group.title }}</b-button>
             </b-card-header>
-            <b-collapse accordion="groups">
+            <b-collapse accordion="groups" :id="'group-' + groupIndex">
                 <b-card-body>
-                    <b-card no-body v-for="event in group.events.values()" :key="event">
+                    <b-card no-body v-for="event in group.events.values()" :key="event.id">
                         <b-card-header class="p-1">
-                            <b-button block class="text-right" >{{ event }}</b-button>
+                            <b-button block class="text-right" >{{ sliceContent(event.data.content) }}</b-button>
                         </b-card-header>
                     </b-card>
                 </b-card-body>

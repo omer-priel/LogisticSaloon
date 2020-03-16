@@ -156,8 +156,6 @@ export default new Vuex.Store({
             }
 
             this.dispatch("sortByTypes");
-
-            console.log(state);
         },
 
         /**
