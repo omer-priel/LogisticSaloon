@@ -1,6 +1,12 @@
 import Vue from 'vue';
 import VueHead from 'vue-head';
 
+require("./js/here/mapsjs-core.js");
+require("./js/here/mapsjs-data.js");
+require("./js/here/mapsjs-service.js");
+require("./js/here/mapsjs-ui.js");
+require("./js/here/mapsjs-mapevents.js");
+
 import App from './App.vue';
 import store from './store';
 import router from "./router";
