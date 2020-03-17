@@ -32,8 +32,8 @@
             
             const defaultLayers = this.platform.createDefaultLayers();
             const mapOptions = {
-                zoom: 8,
-                center: { lat: 31.2, lng: 34.8 }
+                zoom: 7.7,
+                center: { lat: 31.4, lng: 35.2 }
             };
 
             this.map = new H.Map(this.$refs.map, defaultLayers.normal.map, mapOptions);

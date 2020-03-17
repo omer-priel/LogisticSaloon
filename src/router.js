@@ -6,7 +6,7 @@ import charts from "./components/Charts.vue";
 
 Vue.use(VueRouter);
 
-export default new VueRouter({
+let router = new VueRouter({
   routes: [
     { 
         path: "/cards", 
@@ -20,3 +20,7 @@ export default new VueRouter({
     }
   ]
 });
+
+router.replace({ path: '/cards', redirect: '/' })
+
+export default router;
