@@ -1,13 +1,8 @@
 <template>
     <div>
-        <b-navbar variant="faded" type="light">
-            <h1>
-                מידע גרפי
-            </h1>
-        </b-navbar>
-        <div class="chart-box">
-        <PieChart :chart-data="datacollection"/>
-        </div>
+        <b-jumbotron class="chart-box" bg-variant="light">
+            <PieChart :chart-data="datacollection"/>
+        </b-jumbotron>
     </div>
 </template>
 
@@ -63,6 +58,13 @@
 </script>
 
 <style lang="scss" scoped>
+    .chart-box {
+        max-width: 80%;
+        padding: 16px;
+        margin-left: 60px;
+    }
+
+    // old code
     @mixin border-radius($radius) {
         -webkit-border-radius: $radius;
         -moz-border-radius: $radius;
@@ -78,7 +80,7 @@
     #Charts {
         background-color: azure;
     }
-    .chart-box {
+    .chart-box-OLD {
         @include border-radius(10px);
         @include shadow();
         max-width: 300px;

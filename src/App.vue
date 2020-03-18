@@ -5,10 +5,6 @@
 			<b-navbar-nav></b-navbar-nav>
 
 			<b-navbar-nav class="ml-auto">
-        		<b-button variant="primary" class="mr-5" @click="changeMode" :to="(mode ? '/cards' : '/charts')">
-					{{ (mode ? 'לתצוגה המידעית' : 'לתצוגה הסטטיסטית') }} 
-				</b-button>
-
 				<b-dropdown variant="primary" class="mr-5" text="לפיקוד" split right>
     				<b-dropdown-item href="#">פצ"ן</b-dropdown-item>
     				<b-dropdown-item href="#">פקמ"ז</b-dropdown-item>
@@ -20,6 +16,15 @@
     				<b-dropdown-item href="#">הספקה</b-dropdown-item>
     				<b-dropdown-item href="#">אחזקה</b-dropdown-item>
     			</b-dropdown>
+
+				<b-form-radio-group
+					buttons
+    				button-variant="outline-primary"
+					class="mr-5"
+					v-model="mode"
+    				:options="modes"
+					:to="mode"
+      			></b-form-radio-group>
     		</b-navbar-nav>
 
     		<b-navbar-nav class="ml-auto">
@@ -28,7 +33,7 @@
     	</b-collapse>
 	</b-navbar>
 	<main>
-		<div cols="4" v-if="showView" class="slidbar" >
+		<div cols="4" class="slidbar" >
 			<router-view id="view" />
 		</div>
 		<Map ref="map" class="max_height" />
@@ -55,8 +60,11 @@
 
 		data() {
 			return {
-				showView: false,
-				mode: true,
+				mode: "/cards",
+				modes: [
+					{ text: 'לתצוגה המידעית', value: "/cards" },
+					{ text: 'לתצוגה הסטטיסטית', value: "/charts" },
+				],
 			};
 		},
 
@@ -70,12 +78,6 @@
 			...mapActions([
 				"load"
 				]),
-			changeMode() {
-				if (!this.showView) { // first time
-					this.showView = true;
-				}
-				this.mode = !this.mode;
-			}
 		}
 	};
 </script>
