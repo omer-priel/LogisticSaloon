@@ -17,14 +17,10 @@
     				<b-dropdown-item href="#">אחזקה</b-dropdown-item>
     			</b-dropdown>
 
-				<b-form-radio-group
-					buttons
-    				button-variant="outline-primary"
-					class="mr-5"
-					v-model="mode"
-    				:options="modes"
-					:to="mode"
-      			></b-form-radio-group>
+				<b-button-group class="mr-5">
+					<b-button variant="primary" :pressed.sync="modeCards">לתצוגה המידעית</b-button>
+					<b-button variant="primary" :pressed.sync="modeCharts">לתצוגה הסטטיסטית</b-button>
+				</b-button-group>
     		</b-navbar-nav>
 
     		<b-navbar-nav class="ml-auto">
@@ -34,7 +30,8 @@
 	</b-navbar>
 	<main>
 		<div cols="4" class="slidbar" >
-			<router-view id="view" />
+			<Cards ref="cards" v-if="mode" />
+			<Charts v-else />
 		</div>
 		<Map ref="map" class="max_height" />
 	</main>
@@ -45,11 +42,15 @@
 	import { mapActions } from "vuex";
 
 	import Map from "./components/Map.vue";
+	import Cards from "./components/Cards.vue";
+	import Charts from "./components/Charts.vue";
 
 	export default {
 		name: "App",
 		components: {
-			Map
+			Map,
+			Cards,
+			Charts,
 		},
 
 		head: {
@@ -60,24 +61,35 @@
 
 		data() {
 			return {
-				mode: "/cards",
-				modes: [
-					{ text: 'לתצוגה המידעית', value: "/cards" },
-					{ text: 'לתצוגה הסטטיסטית', value: "/charts" },
-				],
+				mode: true,
+				modeCards: true,
+				modeCharts: false,
 			};
 		},
 
 		mounted() {
 			this.load();
 			this.$refs.map.load();
-			this.changeMode();
+			this.$refs.cards.load();
+		},
+
+		watch: {
+			modeCards: function (val) {
+				this.mode = val;
+				this.modeCharts = !val;
+			},
+			modeCharts: function (val) {
+				this.modeCards = !val;
+    		},
 		},
 
 		methods: {
 			...mapActions([
 				"load"
 				]),
+			changeMode() {
+				this.mode = !this.mode;
+			}
 		}
 	};
 </script>

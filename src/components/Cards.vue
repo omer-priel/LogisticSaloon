@@ -8,7 +8,7 @@
                 <b-card-body>
                     <b-card no-body v-for="event in group.events.values()" :key="event.id">
                         <b-card-header class="p-1">
-                            <b-button block class="text-right" >{{ sliceContent(event.data.content) }}</b-button>
+                            <b-button variant="event-card" block class="text-right" @click="this.openEvent(event.id)" >{{ sliceContent(event.data.content) }}</b-button>
                         </b-card-header>
                     </b-card>
                 </b-card-body>
@@ -18,6 +18,8 @@
 </template>
 
 <script>
+    import { mapActions } from "vuex";
+
     import store from "../store";
 
     export default {
@@ -35,10 +37,18 @@
         },
 
         mounted() {
-            this.groups = store.getters.getGroups;
+            this.load();
         },
 
         methods: {
+            ...mapActions([
+                "openEvent"
+            ]),
+
+            load() {
+                this.groups = store.getters.getGroups;
+            },
+
             sliceContent(content) {
                 content = content.slice(0, 50);
                 let end = content.lastIndexOf(" ");
