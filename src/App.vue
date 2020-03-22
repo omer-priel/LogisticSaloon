@@ -35,6 +35,9 @@
 		</div>
 		<Map ref="map" class="max_height" />
 	</main>
+	<footer>
+		<EventModal ref="eventModal" />
+	</footer>
 </body>
 </template>
 
@@ -44,6 +47,7 @@
 	import Map from "./components/Map.vue";
 	import Cards from "./components/Cards.vue";
 	import Charts from "./components/Charts.vue";
+	import EventModal from "./components/EventModal.vue";
 
 	export default {
 		name: "App",
@@ -51,6 +55,7 @@
 			Map,
 			Cards,
 			Charts,
+			EventModal,
 		},
 
 		head: {
@@ -68,7 +73,7 @@
 		},
 
 		mounted() {
-			this.load();
+			this.load(this.$refs.eventModal.show);
 			this.$refs.map.load();
 			this.$refs.cards.load();
 		},

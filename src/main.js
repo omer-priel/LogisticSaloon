@@ -1,5 +1,7 @@
 import Vue from 'vue';
 import VueHead from 'vue-head';
+
+import Bootstrap from 'bootstrap/dist/js/bootstrap.min';
 import BootstrapVue from 'bootstrap-vue';
 
 require("./js/here/mapsjs-core.js");

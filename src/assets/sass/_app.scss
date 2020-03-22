@@ -1,3 +1,7 @@
 .max_height {
     height: 100vh;
 }
+
+.modal-backdrop.show {
+    opacity: 0;
+}

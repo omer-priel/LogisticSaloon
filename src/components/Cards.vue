@@ -8,7 +8,7 @@
                 <b-card-body>
                     <b-card no-body v-for="event in group.events.values()" :key="event.id">
                         <b-card-header class="p-1">
-                            <b-button variant="event-card" block class="text-right" @click="this.openEvent(event.id)" >{{ sliceContent(event.data.content) }}</b-button>
+                            <b-button variant="event-card" block class="text-right" @click="openEvent(event.id)" >{{ sliceContent(event.data.content) }}</b-button>
                         </b-card-header>
                     </b-card>
                 </b-card-body>

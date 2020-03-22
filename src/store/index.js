@@ -16,9 +16,6 @@ function createEvent(data, colorId) {
         data: data,
         colorId: colorId,
         map: {},
-        
-        // event fields
-        opened: false,
     };
     
     return event;
@@ -33,6 +30,11 @@ function createGroup(map, title, fiels = {}) {
     }
 
     map.set(title, group);
+}
+
+function random(min, max) {
+    max++;
+    return Math.floor(Math.random() * (max - min) ) + min;
 }
 
 export default new Vuex.Store({
@@ -141,6 +143,8 @@ export default new Vuex.Store({
         // id => event
         events: new Map(),
 
+        showEventModal: () => {},
+
         // event_type => group
         // Sort by "סוגים". in the code by event_type
         groupsByTypes: new Map(),
@@ -153,7 +157,9 @@ export default new Vuex.Store({
         groups: new Map(),
     },
     mutations: {
-        load(state) {
+        load(state, args) {
+
+            let showEventModal = args[0];
 
             let territorials = [
                 {
@@ -176,14 +182,15 @@ export default new Vuex.Store({
 
             for (let i = 0; i < state.eventsData.length; i++) {
 
-                // Temporary: need to get from the jsons.
+                // Temporary: not need ".event"
+                // Temporary: nead form jsons
                 let eventData = state.eventsData[i].event;
-
+                
                 // Temporary: need to get from the jsons.
                 eventData.from = "גדוד 4321";
-                // create random date
-                eventData.date = new Date().getTime();
-                
+                // Temporary: create random date
+                eventData.date = random(1000000000000, 2000000000000);
+
                 // create the event
                 let eventType = eventData.event_type;
                 if (!state.groupsByTypes.has(eventType)) {
@@ -200,9 +207,11 @@ export default new Vuex.Store({
                 groupByType.events.set(eventId, event);
             
                 // Temporary: need real sort by location
-                let randomTerritorial = Math.floor(Math.random() * 3);
+                let randomTerritorial = random(0, 2);
                 state.groupsByTerritorials.get(territorials[randomTerritorial].title).events.set(eventId, event);
             }
+
+            state.showEventModal = showEventModal;
 
             this.dispatch("sortByTypes");
         },
@@ -241,17 +250,16 @@ export default new Vuex.Store({
             state.groups = groups;
         },
         
-        toggleEvent(state, args) {
+        openEvent(state, args) {
             let id = args[0];
-            let opened = args[1];
             
-            state.events.get(id).opened = opened;
+            state.showEventModal(state.events.get(id));
         },
     },
     actions: {
         // main
-        load(context) {
-            context.commit("load"); 
+        load(context, showEventModal) {
+            context.commit("load", [showEventModal]); 
         },
 
         // sorts and filters
@@ -273,11 +281,7 @@ export default new Vuex.Store({
 
         // on event
         openEvent(context, id) {
-            context.commit("toggleEvent", [id, true]);
-        },
-
-        closeEvent(content, id) {
-            context.commit("toggleEvent", [id, false]);
+            context.commit("openEvent", [id]);
         },
 
     },
@@ -300,5 +304,21 @@ export default new Vuex.Store({
         getEvents(state) {
             return state.events;
         },
+
+        getEventTemplet(state) {
+            let templet = {
+                id: 0,
+                    link: "",
+                    content: "",
+                    event_type: "",
+                    from: "",
+                    date: 0,
+                    location: {
+                        lat: 0,
+                        lng: 0
+                    }
+            }
+            return createEvent(templet, 0);
+        }
     }
 });
