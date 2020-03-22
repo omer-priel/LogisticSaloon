@@ -5,6 +5,10 @@
 </template>
 
 <script>
+
+    import { mapActions } from "vuex";
+
+    import store from '../store';
     import config from "../js/config";
 
     export default {
@@ -15,7 +19,7 @@
         data() {
             return {
                 map: {},
-                platform: {},
+                platform: {}
             };
         },
         created() {
@@ -28,8 +32,8 @@
             
             const defaultLayers = this.platform.createDefaultLayers();
             const mapOptions = {
-                zoom: 8,
-                center: { lat: 31.2, lng: 34.8 }
+                zoom: 7.7,
+                center: { lat: 31.4, lng: 35.2 }
             };
 
             this.map = new H.Map(this.$refs.map, defaultLayers.normal.map, mapOptions);
@@ -40,26 +44,38 @@
 
             ui.removeControl('mapsettings');
         },
+        
         methods: {
-            addEvent (event) {
+            ...mapActions([
+                "openEvent"
+            ]),
+
+            load() {
+                let events = store.getters.getEvents;
+                for (event of events.values()) {
+                    this.addEvent(event);
+                }
+            },
+
+            addEvent(event) {                
                 let location = {
                     lat: event.data.location.lat,
                     lng: event.data.location.lng + 0.06
                 };
 
-                let iconUrl = require('../assets/img/speech-bubble.png');
+                let iconUrl = require('../assets/img/bubble-' + event.colorId + '.png');
 
                 let markerOptions = {
                     icon: new H.map.Icon(iconUrl),
-                    data: event
+                    data: event.id
                 };
     
                 let marker = new H.map.Marker(location, markerOptions);
 
                 marker.addEventListener('tap', function(e) {
-                    let event = e.target.getData();
-                    event.map.onClick.call(event);
-                });
+                    let eventId = e.target.getData();
+                    this.openEvent(eventId);
+                }.bind(this));
                 
                 this.map.addObject(marker);
             }

@@ -1,130 +1,106 @@
 <template>
-    <body id="App">
-        <b-container fluid>
-            <b-row>
-                <b-col>
-                    <Cards ref="cards" class="max_height"/>
-                </b-col>
-                <b-col cols="5">
-                    <Map ref="map" class="max_height" />
-                </b-col>
-                <b-col>
-                    <Charts ref="charts" class="max_height"/>
-                </b-col>
-            </b-row>
-        </b-container>
-    </body>
+<body id="App">
+	<b-navbar fixed="top">
+    	<b-collapse is-nav>
+			<b-navbar-nav></b-navbar-nav>
+
+			<b-navbar-nav class="ml-auto">
+				<b-dropdown variant="primary" class="mr-5" text="לפיקוד" split right>
+    				<b-dropdown-item href="#">פצ"ן</b-dropdown-item>
+    				<b-dropdown-item href="#">פקמ"ז</b-dropdown-item>
+    				<b-dropdown-item href="#">פד"ם</b-dropdown-item>
+    			</b-dropdown>
+				
+				<b-dropdown variant="primary" class="mr-5" text="למערך" split right>
+    				<b-dropdown-item href="#">רפואה</b-dropdown-item>
+    				<b-dropdown-item href="#">הספקה</b-dropdown-item>
+    				<b-dropdown-item href="#">אחזקה</b-dropdown-item>
+    			</b-dropdown>
+
+				<b-button-group class="mr-5">
+					<b-button variant="primary" :pressed.sync="modeCards">לתצוגה המידעית</b-button>
+					<b-button variant="primary" :pressed.sync="modeCharts">לתצוגה הסטטיסטית</b-button>
+				</b-button-group>
+    		</b-navbar-nav>
+
+    		<b-navbar-nav class="ml-auto">
+				<b-navbar-brand>סלון לוגיסטי</b-navbar-brand>
+			</b-navbar-nav>
+    	</b-collapse>
+	</b-navbar>
+	<main>
+		<div cols="4" class="slidbar" >
+			<Cards ref="cards" v-if="mode" />
+			<Charts v-else />
+		</div>
+		<Map ref="map" class="max_height" />
+	</main>
+</body>
 </template>
 
 <script>
-    require("./js/here/mapsjs-core.js");
-    require("./js/here/mapsjs-data.js");
-    require("./js/here/mapsjs-service.js");
-    require("./js/here/mapsjs-ui.js");
-    require("./js/here/mapsjs-mapevents.js");
+	import { mapActions } from "vuex";
 
-    document.body.dir = "rtl";
+	import Map from "./components/Map.vue";
+	import Cards from "./components/Cards.vue";
+	import Charts from "./components/Charts.vue";
 
-    import Cards from "./components/Cards.vue";
-    import Map from "./components/Map.vue";
-    import Charts from "./components/Charts.vue";
+	export default {
+		name: "App",
+		components: {
+			Map,
+			Cards,
+			Charts,
+		},
 
-    export default {
-        name: "App",
+		head: {
+			title: {
+				inner: "Logistic Saloon"
+			}
+		},
 
-        components: {
-            Cards,
-            Map,
-            Charts
-        },
+		data() {
+			return {
+				mode: true,
+				modeCards: true,
+				modeCharts: false,
+			};
+		},
 
-        head: {
-            title: {
-                inner: "Logistic Saloon"
-            }
-        },
+		mounted() {
+			this.load();
+			this.$refs.map.load();
+			this.$refs.cards.load();
+		},
 
-        data() {
-            return {
-                events: [
-                    {
-                        event: {
-                            id: 0,
-                            link: "https://www.hamal.co.il/post/-Le3Soja2sYlS7gZ17nz",
-                            content: "מטח רקטות שוגר לעבר באר שבע",
-                            event_type: "הסלמה בדרום",
-                            location: {
-                                lat: 31.313430926637704,
-                                lng: 34.5967077351318
-                            }
-                        }
-                    },
-                    {
-                      event: {
-                            id: 1,
-                            link: "https://www.hamal.co.il/post/-Laqlj7WosEV8BKPV3NY",
-                            content: "הפסקות חשמל במספר יישובים המועצה האזורית שער הנגב",
-                            event_type: "הסלמה בדרום",
-                            location: {
-                                lat: 31.525942837952083,
-                                lng: 34.59669981017577
-                            }
-                        }
-                    },
-                    {
-                      event: {
-                            id: 2,
-                            link: "https://www.hamal.co.il/post/-LgOmzUeECDM3rxL3kwf",
-                            content:
-                              "דיווח ראשוני על שיגור כושל מצפון רצועת עזה לעבר שטח ישראל. לפי הדיווח, הרקטה נחתה בים",
-                            event_type: "רצועת עזה",
-                            location: {
-                                lat: 32.05020128541517,
-                                lng: 34.75984151911165
-                            }
-                        }
-                    }
-                ]
-            };
-        },
+		watch: {
+			modeCards: function (val) {
+				this.mode = val;
+				this.modeCharts = !val;
+			},
+			modeCharts: function (val) {
+				this.modeCards = !val;
+    		},
+		},
 
-        mounted() {
-            // test
-            this.events.forEach(eventData => {
-
-                eventData.event.from = "גדוד 4321";
-                eventData.event.date = new Date().getTime();
-
-                this.addEvent(eventData);
-            });
-        },
-
-        methods: {
-            addEvent(eventData) {
-            let data = eventData.event;
-            
-            data.date = new Date(data.date);
-
-            let event = {
-                id: data.id,
-                data: data,
-                map: {
-                    onClick() {
-                        console.log(this);
-                    }
-                }
-            };
-
-            this.$refs.map.addEvent(event);
-            this.$refs.cards.addEvent(event);
-          }
-        }
-    };
+		methods: {
+			...mapActions([
+				"load"
+				]),
+			changeMode() {
+				this.mode = !this.mode;
+			}
+		}
+	};
 </script>
 
 <style lang="scss">
-    .row > div {
-        padding-left: 0px;
-        padding-right: 0px;
-    }
+	.slidbar {
+		height: 100%;
+    	width: 30%;
+    	position: fixed;
+    	z-index: 1;
+    	left: 70%;
+    	padding-top: 60px;
+	}
 </style>

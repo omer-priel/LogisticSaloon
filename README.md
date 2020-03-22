@@ -17,12 +17,22 @@ eventData: {
 
 }
 
+group: {
+    
+    title: String
+    
+    colorId: Number
+    events: Map<eventId, event>
+
+}
+
 event: {
     
     id: Number
+    
     data: eventData
-    map: {
-        onClick: Function
-    }
+    colorId: Number
+    map: {}
 
+    opened: Boolean
 }
