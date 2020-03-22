@@ -187,7 +187,7 @@ export default new Vuex.Store({
                 let eventData = state.eventsData[i].event;
                 
                 // Temporary: need to get from the jsons.
-                eventData.from = "גדוד 4321";
+                eventData.from = `יחידה ${random(100, 9999)}`
                 // Temporary: create random date
                 eventData.date = random(1000000000000, 2000000000000);
 
