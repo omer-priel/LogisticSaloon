@@ -8,11 +8,11 @@
 
     import { mapActions } from "vuex";
 
-    import store from '../store';
+    import store from "../store";
     import config from "../js/config";
 
     export default {
-        name: 'Map',
+        name: "Map",
         props: {
 
         },
@@ -40,9 +40,19 @@
 
             let behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(this.map));
 
-            let ui = H.ui.UI.createDefault(this.map, defaultLayers, 'en-US');
+            let ui = H.ui.UI.createDefault(this.map, defaultLayers, "en-US");
 
-            ui.removeControl('mapsettings');
+            //Cuastum UI Controls
+
+            //Map Settings
+            ui.removeControl("mapsettings");
+
+            //Zoom
+            let zoom = ui.getControl("zoom");
+            zoom.setAlignment("left-middle");
+
+            //Scalebar
+            ui.removeControl("scalebar");
         },
         
         methods: {
