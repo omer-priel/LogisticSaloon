@@ -6,17 +6,16 @@
                     <div class="modal-body">
                         <b-card no-body align="right" class="event-card">
                             <b-card-body>
-                                <h4 class="card-title">{{ event.data.from }}</h4>
+                                <h4 class="card-title">{{ from }}</h4>
                                 <h6 class="card-subtitle text-muted">{{ time }}</h6>
                                 <b-card-text>
-                                    {{ event.data.content }}
+                                    {{ content }}
                                 </b-card-text>
                                 <b-row block align="center">
                                     <b-col>
-                                        <a class="card-link" target="_blank" :href="event.data.link">קישור למקור</a>
+                                        <a class="card-link" target="_blank" :href="link">קישור למקור</a>
                                     </b-col>
                                     <b-col>
-                                        <b-button variant="link">מידע נוסף</b-button>
                                     </b-col>
                                 </b-row>
                             </b-card-body>
@@ -39,15 +38,22 @@
         data() {
             return {
                 event: null,
+
+                from: "",
                 time: "",
+                content: "",
+                link: "",
             };
         },
         mounted() {
             this.event = store.getters.getEventTemplet;
         },
         methods: {
+
             show(event) {
                 this.event = event;
+
+                this.from = event.data.from;
 
                 let hours = this.event.data.date.getHours();
                 if (hours < 10) {
@@ -60,6 +66,10 @@
                 }
 
                 this.time = `${hours}:${minutes}`;
+
+                this.content = event.data.content;
+                this.link = event.data.link;
+                
 
                 $("#eventModal").modal('show');
             },

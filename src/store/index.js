@@ -189,9 +189,15 @@ export default new Vuex.Store({
                 createGroup(state.groupsByTerritorials, territorial.title, { centerLocation: territorial.centerLocation });
             });
 
+            let newEventTypes = new Map();
+
             for (let i = 0; i < state.eventTypes.length; i++) {
-                createGroup(state.groupsByTypes, state.eventTypes[i]);
+                let eventType = state.eventTypes[i];
+                newEventTypes.set(i, eventType);
+                createGroup(state.groupsByTypes, eventType);
             }
+
+            state.eventTypes = newEventTypes;
 
             for (let i = 0; i < state.eventsData.length; i++) {
 
@@ -296,7 +302,7 @@ export default new Vuex.Store({
 
     },
     modules: {
-        
+
     },
     getters: {
         getGroups(state) {
@@ -309,6 +315,10 @@ export default new Vuex.Store({
 
         getColors(state) {
             return state.colors;
+        },
+
+        getEventTypes(state) {
+            return state.eventTypes;
         },
 
         getEvents(state) {
