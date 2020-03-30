@@ -40,6 +40,15 @@ function random(min, max) {
 export default new Vuex.Store({
     state: {
         // from the server
+        eventTypes: [
+            "הסלמה בדרום",
+            "רצועת עזה",
+            "תקיפה בסוריה",
+            "עימותים ברצועת עזה",
+            "טרור העפיפונים ובלוני התבערה",
+        ],
+
+        // from the server
         eventsData: [
             {
                 event: {
@@ -180,6 +189,10 @@ export default new Vuex.Store({
                 createGroup(state.groupsByTerritorials, territorial.title, { centerLocation: territorial.centerLocation });
             });
 
+            for (let i = 0; i < state.eventTypes.length; i++) {
+                createGroup(state.groupsByTypes, state.eventTypes[i]);
+            }
+
             for (let i = 0; i < state.eventsData.length; i++) {
 
                 // Temporary: not need ".event"
@@ -193,9 +206,6 @@ export default new Vuex.Store({
 
                 // create the event
                 let eventType = eventData.event_type;
-                if (!state.groupsByTypes.has(eventType)) {
-                    createGroup(state.groupsByTypes, eventType);
-                }
                 let groupByType = state.groupsByTypes.get(eventType);
                 
                 let event = createEvent(eventData, groupByType.colorId);

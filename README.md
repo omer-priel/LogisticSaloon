@@ -2,6 +2,10 @@
 
 # API
 
+Get from the server:
+
+eventTypes: [String]
+
 eventData: {
 
     id: Number
