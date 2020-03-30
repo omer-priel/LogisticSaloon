@@ -68,6 +68,9 @@
 </script>
 
 <style lang="scss" scoped>
+    
+    @import '../assets/sass/_custom.scss';
+
     .card {
         background-color: #ffffff00;
         border: none;
@@ -76,7 +79,20 @@
            border: none;
         }
     }
-    .btn.btn-event-card {
-        background: linear-gradient(to left, #b90000, #b9000063);
+    .btn {
+        border: none;
+        
+        &.btn-event-card {
+            background: linear-gradient(to left, #b90000, #b8000063);
+        }
+
+        @for $i from 0 through 4 {
+            &.btn-group-#{$i} {
+                $group-color: map-get($theme-colors, 'group-#{$i}');
+                $group-color-to: rgba($group-color, 0.388);
+
+                background: linear-gradient(to left, $group-color, $group-color-to);
+            }
+        }
     }
 </style>

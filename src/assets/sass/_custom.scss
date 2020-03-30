@@ -53,12 +53,12 @@ $theme-colors: map-merge(
     'danger': $danger,
     'light': $light,
     'dark': $dark,
+    'event-card': $event-card,
     'group-0': $group-0,
     'group-1': $group-1,
     'group-2': $group-2,
     'group-3': $group-3,
     'group-4': $group-4,
-    'event-card': $event-card,
   ),
   $theme-colors
 );
