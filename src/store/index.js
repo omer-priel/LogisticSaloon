@@ -173,15 +173,18 @@ export default new Vuex.Store({
             let territorials = [
                 {
                     title: 'פצ"ן',
-                    centerLocation: { lat: 31.2, lng: 34.8 },
+                    center: { lat: 32.6, lng: 35.2 },
+                    limit: 32.454868
                 },
                 {
                     title: 'פקמ"ז',
-                    centerLocation: { lat: 31.2, lng: 34.8 }
+                    center: { lat: 31.4, lng: 35.2 },
+                    limit: 31.532362
                 },
                 {
                     title: 'פד"ם',
-                    centerLocation: { lat: 31.2, lng: 34.8 }
+                    center: { lat: 30.8, lng: 35.2 },
+                    limit: 29.452310
                 },
             ];
 
@@ -222,9 +225,13 @@ export default new Vuex.Store({
                 
                 groupByType.events.set(eventId, event);
             
-                // Temporary: need real sort by location
-                let randomTerritorial = random(0, 2);
-                state.groupsByTerritorials.get(territorials[randomTerritorial].title).events.set(eventId, event);
+                for (let territorialIndex = 0; territorialIndex < territorials.length; territorialIndex++) {
+                    let territorial = territorials[territorialIndex];
+                    if (event.data.location.lat > territorial.limit) {
+                        state.groupsByTerritorials.get(territorial.title).events.set(eventId, event);
+                        break;
+                    }
+                }
             }
 
             state.showEventModal = showEventModal;
