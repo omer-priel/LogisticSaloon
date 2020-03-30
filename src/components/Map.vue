@@ -104,6 +104,16 @@
                 };
                 
                 this.map.addObject(marker);
+            },
+
+            changeCenter(zoomIn, location) {
+                if (!zoomIn) {
+                    this.map.setZoom(7.7);
+                    this.map.setCenter({ lat: 31.4, lng: 35.2 });
+                } else {
+                    this.map.setZoom(9);
+                    this.map.setCenter(location);
+                }
             }
         }
     }

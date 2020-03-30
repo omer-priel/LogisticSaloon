@@ -158,6 +158,24 @@ export default new Vuex.Store({
         // Sort by "סוגים". in the code by event_type
         groupsByTypes: new Map(),
 
+        territorials: [
+            {
+                title: 'פצ"ן',
+                center: { lat: 32.6, lng: 35.2 },
+                limit: 32.454868
+            },
+            {
+                title: 'פקמ"ז',
+                center: { lat: 31.4, lng: 35.2 },
+                limit: 31.532362
+            },
+            {
+                title: 'פד"ם',
+                center: { lat: 30.8, lng: 35.2 },
+                limit: 29.452310
+            },
+        ],
+
         // territorial_title => group
         // Sort "פיקודים". in the code by location
         groupsByTerritorials: new Map(),
@@ -170,25 +188,7 @@ export default new Vuex.Store({
 
             let showEventModal = args[0];
 
-            let territorials = [
-                {
-                    title: 'פצ"ן',
-                    center: { lat: 32.6, lng: 35.2 },
-                    limit: 32.454868
-                },
-                {
-                    title: 'פקמ"ז',
-                    center: { lat: 31.4, lng: 35.2 },
-                    limit: 31.532362
-                },
-                {
-                    title: 'פד"ם',
-                    center: { lat: 30.8, lng: 35.2 },
-                    limit: 29.452310
-                },
-            ];
-
-            territorials.forEach(territorial => {
+            state.territorials.forEach(territorial => {
                 createGroup(state.groupsByTerritorials, territorial.title, { centerLocation: territorial.centerLocation });
             });
 
@@ -225,8 +225,8 @@ export default new Vuex.Store({
                 
                 groupByType.events.set(eventId, event);
             
-                for (let territorialIndex = 0; territorialIndex < territorials.length; territorialIndex++) {
-                    let territorial = territorials[territorialIndex];
+                for (let territorialIndex = 0; territorialIndex < state.territorials.length; territorialIndex++) {
+                    let territorial = state.territorials[territorialIndex];
                     if (event.data.location.lat > territorial.limit) {
                         state.groupsByTerritorials.get(territorial.title).events.set(eventId, event);
                         break;
@@ -322,6 +322,10 @@ export default new Vuex.Store({
 
         getColors(state) {
             return state.colors;
+        },
+
+        getTerritorials(state) {
+            return state.territorials;
         },
 
         getEventTypes(state) {
