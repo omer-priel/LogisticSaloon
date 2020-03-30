@@ -39,14 +39,10 @@
 
         },
 
-        props: {
-            mode: {
-                type: String
-            },
-        },
-
         data() {
             return {
+                mode: false,
+
 				modeCards: true,
 				modeCharts: false,
                 
