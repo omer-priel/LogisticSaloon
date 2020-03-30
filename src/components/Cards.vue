@@ -68,6 +68,14 @@
 </script>
 
 <style lang="scss" scoped>
+    .card {
+        background-color: #ffffff00;
+        border: none;
+        
+        .card-header {
+           border: none;
+        }
+    }
     .btn.btn-event-card {
         background: linear-gradient(to left, #b90000, #b9000063);
     }
