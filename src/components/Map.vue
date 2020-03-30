@@ -73,10 +73,13 @@
                     lng: event.data.location.lng + 0.06
                 };
 
-                let iconUrl = require('../assets/img/bubble-' + event.colorId + '.png');
+                let normalIconUrl = require('../assets/img/bubble-' + event.colorId + '.png');
+                let normalIcon = new H.map.Icon(normalIconUrl);
+                let selectedIconUrl = require('../assets/img/bubble-' + event.colorId + '-selected.png');
+                let selectedIcon = new H.map.Icon(selectedIconUrl);
 
                 let markerOptions = {
-                    icon: new H.map.Icon(iconUrl),
+                    icon: normalIcon,
                     data: event.id
                 };
     
@@ -86,6 +89,19 @@
                     let eventId = e.target.getData();
                     this.openEvent(eventId);
                 }.bind(this));
+
+                event.map = {
+                    marker: marker,
+                    normalIcon: normalIcon,
+                    selectedIcon: selectedIcon,
+                    changeIcon(selected) {
+                        if (selected) {
+                            this.marker.setIcon(this.selectedIcon);
+                        } else {
+                            this.marker.setIcon(this.normalIcon);
+                        }
+                    }
+                };
                 
                 this.map.addObject(marker);
             }

@@ -69,9 +69,13 @@
 
                 this.content = event.data.content;
                 this.link = event.data.link;
-                
+
+                event.map.changeIcon(true);
 
                 $("#eventModal").modal('show');
+                $('#eventModal').on('hidden.bs.modal', function (e) {
+                    event.map.changeIcon(false);
+                });
             },
         }
     }

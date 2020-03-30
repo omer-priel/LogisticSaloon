@@ -37,6 +37,4 @@ event: {
     data: eventData
     colorId: Number
     map: {}
-
-    opened: Boolean
 }
