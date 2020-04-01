@@ -161,12 +161,12 @@ export default new Vuex.Store({
         territorials: [
             {
                 title: 'פצ"ן',
-                center: { lat: 32.6, lng: 35.2 },
+                center: { lat: 32.7, lng: 35.2 },
                 limit: 32.454868
             },
             {
                 title: 'פקמ"ז',
-                center: { lat: 31.4, lng: 35.2 },
+                center: { lat: 32, lng: 35.2 },
                 limit: 31.532362
             },
             {
