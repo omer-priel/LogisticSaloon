@@ -1,5 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { stat } from 'fs';
+
+import CustomEvent from '../js/CustomEvent';
 
 Vue.use(Vuex)
 
@@ -15,10 +18,19 @@ function createEvent(data, colorId) {
         // data fields
         data: data,
         colorId: colorId,
+        visibility: true,
+
+        //groups
+        territorial: {},
+        eventType: {},
+
+        //actions
+        setVisibility(visibility) {
+            this.visibility = visibility;
+            this.map.setVisibility(visibility);
+        },
+
         map: {},
-        
-        // event fields
-        opened: false,
     };
     
     return event;
@@ -29,14 +41,33 @@ function createGroup(map, title, fiels = {}) {
         title: title,
         colorId: map.size,
         events: new Map(),
+        setVisibility(visibility) {
+            for (let event of this.events.values()) {
+                event.setVisibility(visibility);
+            }  
+        },
         ...fiels,
     }
 
     map.set(title, group);
 }
 
+function random(min, max) {
+    max++;
+    return Math.floor(Math.random() * (max - min) ) + min;
+}
+
 export default new Vuex.Store({
     state: {
+        // from the server
+        eventTypes: [
+            "הסלמה בדרום",
+            "רצועת עזה",
+            "תקיפה בסוריה",
+            "עימותים ברצועת עזה",
+            "טרור העפיפונים ובלוני התבערה",
+        ],
+
         // from the server
         eventsData: [
             {
@@ -141,9 +172,34 @@ export default new Vuex.Store({
         // id => event
         events: new Map(),
 
-        // event_type => group
+        // events
+        showEventModal: () => {},
+
+        changeMapCenter: (zoomIn, location) => {},
+
+        groupsChanged: new CustomEvent(),
+
+        // event_type => groups
         // Sort by "סוגים". in the code by event_type
         groupsByTypes: new Map(),
+
+        territorials: [
+            {
+                title: 'פצ"ן',
+                center: { lat: 32.7, lng: 35.2 },
+                limit: 32.454868
+            },
+            {
+                title: 'פקמ"ז',
+                center: { lat: 32, lng: 35.2 },
+                limit: 31.532362
+            },
+            {
+                title: 'פד"ם',
+                center: { lat: 30.8, lng: 35.2 },
+                limit: 29.452310
+            },
+        ],
 
         // territorial_title => group
         // Sort "פיקודים". in the code by location
@@ -153,42 +209,40 @@ export default new Vuex.Store({
         groups: new Map(),
     },
     mutations: {
-        load(state) {
+        load(state, args) {
 
-            let territorials = [
-                {
-                    title: 'פצ"ן',
-                    centerLocation: { lat: 31.2, lng: 34.8 },
-                },
-                {
-                    title: 'פקמ"ז',
-                    centerLocation: { lat: 31.2, lng: 34.8 }
-                },
-                {
-                    title: 'פד"ם',
-                    centerLocation: { lat: 31.2, lng: 34.8 }
-                },
-            ];
+            let showEventModal = args[0];
+            let changeMapCenter = args[1];
 
-            territorials.forEach(territorial => {
-                createGroup(state.groupsByTerritorials, territorial.title, { centerLocation: territorial.centerLocation });
+            state.territorials.forEach(territorial => {
+                createGroup(state.groupsByTerritorials, territorial.title, {
+                    center: territorial.center,
+                });
             });
+
+            let newEventTypes = new Map();
+
+            for (let i = 0; i < state.eventTypes.length; i++) {
+                let eventType = state.eventTypes[i];
+                newEventTypes.set(i, eventType);
+                createGroup(state.groupsByTypes, eventType);
+            }
+
+            state.eventTypes = newEventTypes;
 
             for (let i = 0; i < state.eventsData.length; i++) {
 
-                // Temporary: need to get from the jsons.
+                // Temporary: not need ".event"
+                // Temporary: nead form jsons
                 let eventData = state.eventsData[i].event;
-
-                // Temporary: need to get from the jsons.
-                eventData.from = "גדוד 4321";
-                // create random date
-                eventData.date = new Date().getTime();
                 
+                // Temporary: need to get from the jsons.
+                eventData.from = `יחידה ${random(100, 9999)}`
+                // Temporary: create random date
+                eventData.date = random(1000000000000, 2000000000000);
+
                 // create the event
                 let eventType = eventData.event_type;
-                if (!state.groupsByTypes.has(eventType)) {
-                    createGroup(state.groupsByTypes, eventType);
-                }
                 let groupByType = state.groupsByTypes.get(eventType);
                 
                 let event = createEvent(eventData, groupByType.colorId);
@@ -198,14 +252,24 @@ export default new Vuex.Store({
                 state.events.set(eventId, event);
                 
                 groupByType.events.set(eventId, event);
+                event.eventType = groupByType;
             
-                // Temporary: need real sort by location
-                let randomTerritorial = Math.floor(Math.random() * 3);
-                state.groupsByTerritorials.get(territorials[randomTerritorial].title).events.set(eventId, event);
+                for (let territorialIndex = 0; territorialIndex < state.territorials.length; territorialIndex++) {
+                    let territorial = state.territorials[territorialIndex];
+                    if (event.data.location.lat > territorial.limit) {
+                        let groupByTerritorial = state.groupsByTerritorials.get(territorial.title);
+                        groupByTerritorial.events.set(eventId, event);
+                        event.territorial = groupByTerritorial;
+                        break;
+                    }
+                }
             }
 
-            this.dispatch("sortByTypes");
+            state.showEventModal = showEventModal;
+            state.changeMapCenter = changeMapCenter;
         },
+
+
 
         /**
          * 
@@ -217,41 +281,94 @@ export default new Vuex.Store({
             let sortBy = args[0];
             let filterTitle = args[1];
 
-            let groups;
-            switch (sortBy) {
-                case "types": {
-                    groups = state.groupsByTypes;
+            state.groups = state.groupsByTypes;
+
+            if (filterTitle) { // filter
+                if (sortBy == "types") { // filter Event Type
+
+                    for (let group of state.groupsByTypes.values()) {
+                        group.setVisibility(false);
+                    }
+
+                    let group = state.groupsByTypes.get(filterTitle);
+                    group.setVisibility(true);
+
+                    let groups = new Map();
+                    groups.set(filterTitle, group);
+
+                    state.groups = groups;
+                
+                } else { // filter Territorial
+                    for (let territorial of state.groupsByTerritorials.values()) {
+                        territorial.setVisibility(false);
+                    }
+
+                    let territorial = state.groupsByTerritorials.get(filterTitle);
+                    territorial.setVisibility(true);
+
+                    state.changeMapCenter(true, territorial.center);
                 }
-                break;
-                case "territorials": {
-                    groups = state.groupsByTerritorials;
+            } else { // sort
+                if (sortBy == "types") { // sort Event Type
+                    for (let group of state.groupsByTypes.values()) {
+                        group.setVisibility(true);
+                    }
+
+                    state.changeMapCenter(false, null);
+
+                } else { // sort Territorial
+                    for (let territorial of state.groupsByTerritorials.values()) {
+                        territorial.setVisibility(true);
+                    }
+
+                    let sortGroups = new Map();
+                    for (let group of state.groups.values()) {
+                        let sortGroup = {...group};
+                        sortGroup.events = new Map();
+
+                        let territorials = [];
+                        for (let i = 0; i < state.territorials.length; i++) {
+                            territorials[i] = new Map();
+                        }
+
+                        for (let event of group.events.values()) {
+                            territorials[event.territorial.colorId].set(event.id, event);
+                        }
+
+                        for (let i = 0; i < state.territorials.length; i++) {
+                            for (let event of territorials[i].values()) {
+                                sortGroup.events.set(event.id, event);
+                            }
+                        }
+
+                        sortGroups.set(group.title, sortGroup);
+                    }
+
+                    state.groups = sortGroups;
+
+                    state.changeMapCenter(false, null);
                 }
-                break;
-                default: {
-                    console.error("not exist");
-                    return;
-                }
-            }
-            if (filterTitle) {
-                let group = new Map();
-                group.set(filter_title, groups.get(filterTitle));
-                groups = group;
             }
 
-            state.groups = groups;
+            state.groupsChanged.run();
         },
         
-        toggleEvent(state, args) {
+        openEvent(state, args) {
             let id = args[0];
-            let opened = args[1];
             
-            state.events.get(id).opened = opened;
+            state.showEventModal(state.events.get(id));
         },
+
+        addGroupsChanged(state, args) {
+            let callback = args[0];
+            
+            state.groupsChanged.add(callback);
+        }
     },
     actions: {
         // main
-        load(context) {
-            context.commit("load"); 
+        load(context, args) {
+            context.commit("load", args); 
         },
 
         // sorts and filters
@@ -273,11 +390,11 @@ export default new Vuex.Store({
 
         // on event
         openEvent(context, id) {
-            context.commit("toggleEvent", [id, true]);
+            context.commit("openEvent", [id]);
         },
 
-        closeEvent(content, id) {
-            context.commit("toggleEvent", [id, false]);
+        addGroupsChanged(context, callback) {
+            context.commit("addGroupsChanged", [callback]);
         },
 
     },
@@ -293,12 +410,40 @@ export default new Vuex.Store({
             return state.groupsByTypes;
         },
 
+        getGroupsByTerritorials(state) {
+            return state.groupsByTerritorials;
+        },
+
         getColors(state) {
             return state.colors;
+        },
+
+        getTerritorials(state) {
+            return state.territorials;
+        },
+
+        getEventTypes(state) {
+            return state.eventTypes;
         },
 
         getEvents(state) {
             return state.events;
         },
+
+        getEventTemplet(state) {
+            let templet = {
+                id: 0,
+                    link: "",
+                    content: "",
+                    event_type: "",
+                    from: "",
+                    date: 0,
+                    location: {
+                        lat: 0,
+                        lng: 0
+                    }
+            }
+            return createEvent(templet, 0);
+        }
     }
 });

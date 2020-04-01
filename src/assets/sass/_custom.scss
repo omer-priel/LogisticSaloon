@@ -32,7 +32,7 @@ $warning: $yellow !default;
 $danger: $red !default;
 $light: $gray-100 !default;
 $dark: $gray-800 !default;
-$event-card: #ad0c0c;
+$event-card: #b90000;
 $group-0: #26c485;
 $group-1: #99cdfe;
 $group-2: #e9e39b;
@@ -53,12 +53,12 @@ $theme-colors: map-merge(
     'danger': $danger,
     'light': $light,
     'dark': $dark,
+    'event-card': $event-card,
     'group-0': $group-0,
     'group-1': $group-1,
     'group-2': $group-2,
     'group-3': $group-3,
     'group-4': $group-4,
-    'event-card': $event-card,
   ),
   $theme-colors
 );

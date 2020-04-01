@@ -2,6 +2,10 @@
 
 # API
 
+Get from the server:
+
+eventTypes: [String]
+
 eventData: {
 
     id: Number
@@ -33,6 +37,4 @@ event: {
     data: eventData
     colorId: Number
     map: {}
-
-    opened: Boolean
 }

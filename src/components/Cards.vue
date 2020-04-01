@@ -2,15 +2,11 @@
     <div>
         <b-card no-body v-for="(group, groupIndex) in groups.values()" :key="group.title">
             <b-card-header class="p-1">
-                <b-button block :variant="'group-' + groupIndex" v-b-toggle="'group-' + groupIndex">{{ group.title }}</b-button>
+                <b-button block :variant="'group-' + group.colorId" v-b-toggle="'group-' + groupIndex">{{ group.title }}</b-button>
             </b-card-header>
             <b-collapse accordion="groups" :id="'group-' + groupIndex">
                 <b-card-body>
-                    <b-card no-body v-for="event in group.events.values()" :key="event.id">
-                        <b-card-header class="p-1">
-                            <b-button variant="event-card" block class="text-right" @click="this.openEvent(event.id)" >{{ sliceContent(event.data.content) }}</b-button>
-                        </b-card-header>
-                    </b-card>
+                    <EventCard v-for="event in group.events.values()" :key="event.id" :eventIn.sync="event" />
                 </b-card-body>
             </b-collapse>
         </b-card>
@@ -18,15 +14,18 @@
 </template>
 
 <script>
+    
     import { mapActions } from "vuex";
 
     import store from "../store";
+
+    import EventCard from './EventCard.vue';
 
     export default {
         name: 'Cards',
         
         components: {
-
+            EventCard
         },
 
         data() {
@@ -37,17 +36,17 @@
         },
 
         mounted() {
-            this.load();
+            this.groups = store.getters.getGroups;
+
+            this.addGroupsChanged(function() {
+                    this.groups = store.getters.getGroups;
+                }.bind(this));
         },
 
         methods: {
-            ...mapActions([
-                "openEvent"
-            ]),
-
-            load() {
-                this.groups = store.getters.getGroups;
-            },
+			...mapActions([
+				"addGroupsChanged"
+                ]),
 
             sliceContent(content) {
                 content = content.slice(0, 50);
@@ -69,4 +68,26 @@
 
 <style lang="scss" scoped>
     
+    @import '../assets/sass/_custom.scss';
+
+    .card {
+        background-color: #ffffff00;
+        border: none;
+        
+        .card-header {
+           border: none;
+        }
+    }
+    .btn {
+        border: none;
+
+        @for $i from 0 through 4 {
+            &.btn-group-#{$i} {
+                $group-color: map-get($theme-colors, 'group-#{$i}');
+                $group-color-to: rgba($group-color, 0.388);
+
+                background: linear-gradient(to left, $group-color, $group-color-to);
+            }
+        }
+    }
 </style>
