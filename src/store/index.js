@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { stat } from 'fs';
 
+import CustomEvent from '../js/CustomEvent';
+
 Vue.use(Vuex)
 
 function createEvent(data, colorId) {
@@ -175,6 +177,8 @@ export default new Vuex.Store({
 
         changeMapCenter: (zoomIn, location) => {},
 
+        groupsChanged: new CustomEvent(),
+
         // event_type => groups
         // Sort by "סוגים". in the code by event_type
         groupsByTypes: new Map(),
@@ -279,7 +283,7 @@ export default new Vuex.Store({
             let sortBy = args[0];
             let filterTitle = args[1];
 
-            console.log(args);
+            console.log(`groupsFilter: ${sortBy} - ${filterTitle}`);
 
             state.groups = state.groupsByTypes;
 
@@ -306,7 +310,8 @@ export default new Vuex.Store({
 
                     let sortGroups = new Map();
                     for (let group of state.groups.values()) {
-                        let sortGroup = new Map();
+                        let sortGroup = {...group};
+                        sortGroup.events = new Map();
 
                         let territorials = [];
                         for (let i = 0; i < state.territorials.length; i++) {
@@ -319,7 +324,7 @@ export default new Vuex.Store({
 
                         for (let i = 0; i < state.territorials.length; i++) {
                             for (let event of territorials[i].values()) {
-                                sortGroup.set(event.id, event);
+                                sortGroup.events.set(event.id, event);
                             }
                         }
 
@@ -327,6 +332,8 @@ export default new Vuex.Store({
                     }
 
                     state.groups = sortGroups;
+
+                    state.groupsChanged.run();
 
                     state.changeMapCenter(false, null);
                 }
@@ -338,6 +345,12 @@ export default new Vuex.Store({
             
             state.showEventModal(state.events.get(id));
         },
+
+        addGroupsChanged(state, args) {
+            let callback = args[0];
+            
+            state.groupsChanged.add(callback);
+        }
     },
     actions: {
         // main
@@ -365,6 +378,10 @@ export default new Vuex.Store({
         // on event
         openEvent(context, id) {
             context.commit("openEvent", [id]);
+        },
+
+        addGroupsChanged(context, callback) {
+            context.commit("addGroupsChanged", [callback]);
         },
 
     },

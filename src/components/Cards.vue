@@ -14,6 +14,9 @@
 </template>
 
 <script>
+    
+    import { mapActions } from "vuex";
+
     import store from "../store";
 
     import EventCard from './EventCard.vue';
@@ -34,9 +37,16 @@
 
         mounted() {
             this.load();
+            this.addGroupsChanged(function() {
+                this.groups = store.getters.getGroups;
+            }.bind(this));
         },
 
         methods: {
+			...mapActions([
+				"addGroupsChanged"
+                ]),
+            
             load() {
                 this.groups = store.getters.getGroups;
             },
