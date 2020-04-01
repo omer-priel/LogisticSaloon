@@ -5,9 +5,7 @@
 
 			<b-navbar-nav class="ml-auto">
 				<b-dropdown variant="primary" @click="eventSortByTerritorials()" class="mr-5" text="לפי פיקוד" split right>
-    				<b-dropdown-item-button @click="eventFilterTerritorial(0)">פצ"ן</b-dropdown-item-button>
-    				<b-dropdown-item-button @click="eventFilterTerritorial(1)">פקמ"ז</b-dropdown-item-button>
-    				<b-dropdown-item-button @click="eventFilterTerritorial(2)">פד"ם</b-dropdown-item-button>
+                    <b-dropdown-item-button v-for="territorial in territorials.values()" :key="territorial.title" @click="eventFilterTerritorial(territorial.title)" class="text-right">{{ territorial.title }}</b-dropdown-item-button>
     			</b-dropdown>
 				
 				<b-dropdown variant="primary" @click="eventSortByEventTypes()" class="mr-5" text="לפי מערך" split right>
@@ -47,6 +45,7 @@
 				modeCharts: false,
                 
                 types: new Map(),
+                territorials: [],
             };
         },
 
@@ -76,27 +75,23 @@
 
             load() {
                 this.types = store.getters.getEventTypes;
+                this.territorials = store.getters.getTerritorials;
             },
 
             eventSortByTerritorials() {
-                console.log("eventSortByTerritorials");
-
-                this.$emit("changeCenter", [false, null]);
+                this.sortByTerritorials();
             },
 
-            eventFilterTerritorial(index) {
-
-                let center = store.getters.getTerritorials[index].center;
-
-                this.$emit("changeCenter", [true, center]);
+            eventFilterTerritorial(title) {
+                this.filterByTerritorial(title);
             },
             
             eventSortByEventTypes() {
-                console.log("eventSortByEventTypes");
+                this.sortByTypes();
             },
 
             eventFilterEventType(eventType) {
-                console.log(eventType);
+                this.filterByType(eventType);
             },
         }
     }

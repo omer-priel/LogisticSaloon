@@ -158,9 +158,12 @@ export default new Vuex.Store({
         // id => event
         events: new Map(),
 
+        // events
         showEventModal: () => {},
 
-        // event_type => group
+        changeMapCenter: (zoomIn, location) => {},
+
+        // event_type => groups
         // Sort by "סוגים". in the code by event_type
         groupsByTypes: new Map(),
 
@@ -192,7 +195,10 @@ export default new Vuex.Store({
     mutations: {
         load(state, args) {
 
+            args = args[0];
+
             let showEventModal = args[0];
+            let changeMapCenter = args[1];
 
             state.territorials.forEach(territorial => {
                 createGroup(state.groupsByTerritorials, territorial.title, {
@@ -246,6 +252,7 @@ export default new Vuex.Store({
             }
 
             state.showEventModal = showEventModal;
+            state.changeMapCenter = changeMapCenter;
 
             this.dispatch("sortByTypes");
         },
@@ -260,28 +267,47 @@ export default new Vuex.Store({
             let sortBy = args[0];
             let filterTitle = args[1];
 
-            let groups;
-            switch (sortBy) {
-                case "types": {
-                    groups = state.groupsByTypes;
+            state.groups = state.groupsByTypes;
+
+            console.log(args);
+
+            if (filterTitle) { // filter
+                if (sortBy == "types") { // filter Event Type
+
+                } else { // filter Territorial
+                    let center = state.groupsByTerritorials.get(filterTitle).center;
+                    state.changeMapCenter(true, center);
                 }
-                break;
-                case "territorials": {
-                    groups = state.groupsByTerritorials;
+            } else { // sort
+                if (sortBy == "types") { // sort Event Type
+
+                } else { // sort Territorial
+                    state.changeMapCenter(false, null);
                 }
-                break;
-                default: {
-                    console.error("not exist");
-                    return;
-                }
-            }
-            if (filterTitle) {
-                let group = new Map();
-                group.set(filter_title, groups.get(filterTitle));
-                groups = group;
             }
 
-            state.groups = groups;
+            // let groups;
+            // switch (sortBy) {
+            //     case "types": {
+            //         groups = state.groupsByTypes;
+            //     }
+            //     break;
+            //     case "territorials": {
+            //         groups = state.groupsByTerritorials;
+            //     }
+            //     break;
+            //     default: {
+            //         console.error("not exist");
+            //         return;
+            //     }
+            // }
+            // if (filterTitle) {
+            //     let group = new Map();
+            //     group.set(filter_title, groups.get(filterTitle));
+            //     groups = group;
+            // }
+
+            // state.groups = groups;
         },
         
         openEvent(state, args) {

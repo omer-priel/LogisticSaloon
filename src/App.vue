@@ -1,7 +1,7 @@
 <template>
 <body id="App">
 	<main>
-		<Navbar ref="navbar" v-model="mode" @changeCenter="changeCenter" />
+		<Navbar ref="navbar" v-model="mode"/>
 		<div cols="4" class="slidbar" >
 			<Cards ref="cards" v-if="mode" />
 			<Charts v-else />
@@ -46,7 +46,7 @@
 		},
 
 		mounted() {
-			this.load(this.$refs.eventModal.show);
+			this.load([this.$refs.eventModal.show, this.$refs.map.changeCenter]);
 			this.$refs.navbar.load();
 			this.$refs.map.load();
 			this.$refs.cards.load();
@@ -59,10 +59,6 @@
 			
 			changeMode() {
 				this.mode = !this.mode;
-			},
-
-			changeCenter(args) {
-				this.$refs.map.changeCenter(args[0], args[1]);
 			}
 		}
 	};
