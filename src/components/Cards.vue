@@ -6,11 +6,7 @@
             </b-card-header>
             <b-collapse accordion="groups" :id="'group-' + groupIndex">
                 <b-card-body>
-                    <b-card no-body v-for="event in group.events.values()" :key="event.id">
-                        <b-card-header class="p-1">
-                            <b-button variant="event-card" block class="text-right" @click="openEvent(event.id)" >{{ sliceContent(event.data.content) }}</b-button>
-                        </b-card-header>
-                    </b-card>
+                    <EventCard v-for="event in group.events.values()" :key="event.id" :event="event" />
                 </b-card-body>
             </b-collapse>
         </b-card>
@@ -18,15 +14,15 @@
 </template>
 
 <script>
-    import { mapActions } from "vuex";
-
     import store from "../store";
+
+    import EventCard from './EventCard.vue';
 
     export default {
         name: 'Cards',
         
         components: {
-
+            EventCard
         },
 
         data() {
@@ -41,10 +37,6 @@
         },
 
         methods: {
-            ...mapActions([
-                "openEvent"
-            ]),
-
             load() {
                 this.groups = store.getters.getGroups;
             },
@@ -81,10 +73,6 @@
     }
     .btn {
         border: none;
-        
-        &.btn-event-card {
-            background: linear-gradient(to left, #b90000, #b8000063);
-        }
 
         @for $i from 0 through 4 {
             &.btn-group-#{$i} {

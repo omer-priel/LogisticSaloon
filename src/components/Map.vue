@@ -61,30 +61,10 @@
             ]),
 
             load() {
-                
-                let territorials = store.getters.getGroupsByTerritorials;
-                for (let group of territorials.values()) {
-                    this.addGroupMapTo(group);
-                }
-                
-                let eventTypes = store.getters.getGroupsByTypes;
-                for (let group of eventTypes.values()) {
-                    this.addGroupMapTo(group);
-                }
-
                 let events = store.getters.getEvents;
                 for (let event of events.values()) {
                     this.addEvent(event);
                 }
-            },
-
-            addGroupMapTo(obj) {
-                let group = new H.map.Group();
-                obj.map.setVisibility = function (visibility) {
-                    for (let event of this.events.values()) {
-                        event.map.setVisibility(visibility);
-                    }
-                }.bind(obj);
             },
 
             addEvent(event) {                

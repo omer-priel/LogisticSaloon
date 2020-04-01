@@ -15,10 +15,18 @@ function createEvent(data, colorId) {
         // data fields
         data: data,
         colorId: colorId,
+        visibility: true,
 
         //groups
         territorial: {},
         eventType: {},
+
+        //actions
+        setVisibility(visibility) {
+            console.log(this);
+            this.visibility = visibility;
+            this.map.setVisibility(visibility);
+        },
 
         map: {},
     };
@@ -31,7 +39,11 @@ function createGroup(map, title, fiels = {}) {
         title: title,
         colorId: map.size,
         events: new Map(),
-        map: {},
+        setVisibility(visibility) {
+            for (let event of this.events.values()) {
+                event.setVisibility(visibility);
+            }  
+        },
         ...fiels,
     }
 
@@ -267,20 +279,24 @@ export default new Vuex.Store({
             let sortBy = args[0];
             let filterTitle = args[1];
 
-            state.groups = state.groupsByTypes;
-
             console.log(args);
 
             if (filterTitle) { // filter
                 if (sortBy == "types") { // filter Event Type
 
                 } else { // filter Territorial
-                    let center = state.groupsByTerritorials.get(filterTitle).center;
-                    state.changeMapCenter(true, center);
+                    for (let territorial of state.groupsByTerritorials.values()) {
+                        territorial.setVisibility(false);
+                    }
+
+                    let territorial = state.groupsByTerritorials.get(filterTitle);
+                    territorial.setVisibility(true);
+
+                    state.changeMapCenter(true, territorial.center);
                 }
             } else { // sort
                 if (sortBy == "types") { // sort Event Type
-
+                    state.groups = state.groupsByTypes;
                 } else { // sort Territorial
                     state.changeMapCenter(false, null);
                 }
