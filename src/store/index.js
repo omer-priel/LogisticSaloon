@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { stat } from 'fs';
 
 Vue.use(Vuex)
 
@@ -280,11 +281,12 @@ export default new Vuex.Store({
 
             console.log(args);
 
+            state.groups = state.groupsByTypes;
+
             if (filterTitle) { // filter
                 if (sortBy == "types") { // filter Event Type
 
                 } else { // filter Territorial
-                    state.groups = state.groupsByTypes;
                     for (let territorial of state.groupsByTerritorials.values()) {
                         territorial.setVisibility(false);
                     }
@@ -296,11 +298,39 @@ export default new Vuex.Store({
                 }
             } else { // sort
                 if (sortBy == "types") { // sort Event Type
-                    state.groups = state.groupsByTypes;
+
                 } else { // sort Territorial
                     for (let territorial of state.groupsByTerritorials.values()) {
                         territorial.setVisibility(true);
                     }
+
+                    let sortGroups = new Map();
+                    for (let group of state.groups.values()) {
+                        let sortGroup = new Map();
+
+                        let territorials = [];
+                        for (let i = 0; i < state.territorials.length; i++) {
+                            territorials[i] = new Map();
+                        }
+
+                        for (let event of group.events.values()) {
+                            territorials[event.territorial.colorId].set(event.id, event);
+                        }
+
+                        for (let i = 0; i < state.territorials.length; i++) {
+                            for (let event of territorials[i].values()) {
+                                sortGroup.set(event.id, event);
+                            }
+                        }
+
+                        sortGroups.set(group.title, sortGroup);
+                    }
+
+                    console.log(state.groups);
+
+                    state.groups = sortGroups;
+
+                    console.log(state.groups);
 
                     state.changeMapCenter(false, null);
                 }
