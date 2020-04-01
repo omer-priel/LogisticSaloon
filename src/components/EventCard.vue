@@ -1,5 +1,5 @@
 <template>
-    <b-card no-body :class="(visibility) ? '' : 'd-none'">
+    <b-card no-body :class="(event.visibility) ? '' : 'd-none'">
         <b-card-header class="p-1">
             <b-button variant="event-card" block class="text-right" @click="openEvent(event.id)" >{{ sliceContent(event.data.content) }}</b-button>
         </b-card-header>
@@ -15,19 +15,16 @@
     export default {
         name: "EventCard",
         props: [
-            "event"
+            "eventIn"
         ],
         data() {
             return {
                 visibility: true,
+                event: {},
             };
         },
-        watch: {
-            event: {
-                visibility(val) {
-                    this.visibility = val;
-                }
-            }
+        created() {
+            this.event = this.eventIn;
         },
         methods: {
             ...mapActions([

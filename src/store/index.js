@@ -23,7 +23,6 @@ function createEvent(data, colorId) {
 
         //actions
         setVisibility(visibility) {
-            console.log(this);
             this.visibility = visibility;
             this.map.setVisibility(visibility);
         },
@@ -285,6 +284,7 @@ export default new Vuex.Store({
                 if (sortBy == "types") { // filter Event Type
 
                 } else { // filter Territorial
+                    state.groups = state.groupsByTypes;
                     for (let territorial of state.groupsByTerritorials.values()) {
                         territorial.setVisibility(false);
                     }
@@ -298,32 +298,13 @@ export default new Vuex.Store({
                 if (sortBy == "types") { // sort Event Type
                     state.groups = state.groupsByTypes;
                 } else { // sort Territorial
+                    for (let territorial of state.groupsByTerritorials.values()) {
+                        territorial.setVisibility(true);
+                    }
+
                     state.changeMapCenter(false, null);
                 }
             }
-
-            // let groups;
-            // switch (sortBy) {
-            //     case "types": {
-            //         groups = state.groupsByTypes;
-            //     }
-            //     break;
-            //     case "territorials": {
-            //         groups = state.groupsByTerritorials;
-            //     }
-            //     break;
-            //     default: {
-            //         console.error("not exist");
-            //         return;
-            //     }
-            // }
-            // if (filterTitle) {
-            //     let group = new Map();
-            //     group.set(filter_title, groups.get(filterTitle));
-            //     groups = group;
-            // }
-
-            // state.groups = groups;
         },
         
         openEvent(state, args) {

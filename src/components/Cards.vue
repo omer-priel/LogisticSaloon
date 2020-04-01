@@ -6,7 +6,7 @@
             </b-card-header>
             <b-collapse accordion="groups" :id="'group-' + groupIndex">
                 <b-card-body>
-                    <EventCard v-for="event in group.events.values()" :key="event.id" :event="event" />
+                    <EventCard v-for="event in group.events.values()" :key="event.id" :eventIn.sync="event" />
                 </b-card-body>
             </b-collapse>
         </b-card>
