@@ -211,8 +211,6 @@ export default new Vuex.Store({
     mutations: {
         load(state, args) {
 
-            args = args[0];
-
             let showEventModal = args[0];
             let changeMapCenter = args[1];
 
@@ -269,9 +267,9 @@ export default new Vuex.Store({
 
             state.showEventModal = showEventModal;
             state.changeMapCenter = changeMapCenter;
-
-            this.dispatch("sortByTypes");
         },
+
+
 
         /**
          * 
@@ -283,13 +281,23 @@ export default new Vuex.Store({
             let sortBy = args[0];
             let filterTitle = args[1];
 
-            console.log(`groupsFilter: ${sortBy} - ${filterTitle}`);
-
             state.groups = state.groupsByTypes;
 
             if (filterTitle) { // filter
                 if (sortBy == "types") { // filter Event Type
 
+                    for (let group of state.groupsByTypes.values()) {
+                        group.setVisibility(false);
+                    }
+
+                    let group = state.groupsByTypes.get(filterTitle);
+                    group.setVisibility(true);
+
+                    let groups = new Map();
+                    groups.set(filterTitle, group);
+
+                    state.groups = groups;
+                
                 } else { // filter Territorial
                     for (let territorial of state.groupsByTerritorials.values()) {
                         territorial.setVisibility(false);
@@ -302,6 +310,11 @@ export default new Vuex.Store({
                 }
             } else { // sort
                 if (sortBy == "types") { // sort Event Type
+                    for (let group of state.groupsByTypes.values()) {
+                        group.setVisibility(true);
+                    }
+
+                    state.changeMapCenter(false, null);
 
                 } else { // sort Territorial
                     for (let territorial of state.groupsByTerritorials.values()) {
@@ -354,8 +367,8 @@ export default new Vuex.Store({
     },
     actions: {
         // main
-        load(context, showEventModal) {
-            context.commit("load", [showEventModal]); 
+        load(context, args) {
+            context.commit("load", args); 
         },
 
         // sorts and filters

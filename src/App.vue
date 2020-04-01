@@ -49,11 +49,14 @@
 			this.load([this.$refs.eventModal.show, this.$refs.map.changeCenter]);
 			this.$refs.navbar.load();
 			this.$refs.map.load();
+
+			this.sortByTypes();
 		},
 
 		methods: {
 			...mapActions([
-				"load"
+				"load",
+				"sortByTypes"
 				]),
 			
 			changeMode() {
