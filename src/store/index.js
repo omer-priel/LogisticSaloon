@@ -15,6 +15,11 @@ function createEvent(data, colorId) {
         // data fields
         data: data,
         colorId: colorId,
+
+        //groups
+        territorial: {},
+        eventType: {},
+
         map: {},
     };
     
@@ -26,6 +31,7 @@ function createGroup(map, title, fiels = {}) {
         title: title,
         colorId: map.size,
         events: new Map(),
+        map: {},
         ...fiels,
     }
 
@@ -189,7 +195,9 @@ export default new Vuex.Store({
             let showEventModal = args[0];
 
             state.territorials.forEach(territorial => {
-                createGroup(state.groupsByTerritorials, territorial.title, { centerLocation: territorial.centerLocation });
+                createGroup(state.groupsByTerritorials, territorial.title, {
+                    center: territorial.center,
+                });
             });
 
             let newEventTypes = new Map();
@@ -224,11 +232,14 @@ export default new Vuex.Store({
                 state.events.set(eventId, event);
                 
                 groupByType.events.set(eventId, event);
+                event.eventType = groupByType;
             
                 for (let territorialIndex = 0; territorialIndex < state.territorials.length; territorialIndex++) {
                     let territorial = state.territorials[territorialIndex];
                     if (event.data.location.lat > territorial.limit) {
-                        state.groupsByTerritorials.get(territorial.title).events.set(eventId, event);
+                        let groupByTerritorial = state.groupsByTerritorials.get(territorial.title);
+                        groupByTerritorial.events.set(eventId, event);
+                        event.territorial = groupByTerritorial;
                         break;
                     }
                 }
@@ -318,6 +329,10 @@ export default new Vuex.Store({
 
         getGroupsByTypes(state) {
             return state.groupsByTypes;
+        },
+
+        getGroupsByTerritorials(state) {
+            return state.groupsByTerritorials;
         },
 
         getColors(state) {

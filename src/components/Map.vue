@@ -33,7 +33,7 @@
             const defaultLayers = this.platform.createDefaultLayers();
             const mapOptions = {
                 zoom: 7.7,
-                center: { lat: 31.4, lng: 35.2 }
+                center: { lat: 31.55, lng: 35.2 }
             };
 
             this.map = new H.Map(this.$refs.map, defaultLayers.normal.map, mapOptions);
@@ -61,10 +61,30 @@
             ]),
 
             load() {
+                
+                let territorials = store.getters.getGroupsByTerritorials;
+                for (let group of territorials.values()) {
+                    this.addGroupMapTo(group);
+                }
+                
+                let eventTypes = store.getters.getGroupsByTypes;
+                for (let group of eventTypes.values()) {
+                    this.addGroupMapTo(group);
+                }
+
                 let events = store.getters.getEvents;
-                for (event of events.values()) {
+                for (let event of events.values()) {
                     this.addEvent(event);
                 }
+            },
+
+            addGroupMapTo(obj) {
+                let group = new H.map.Group();
+                obj.map.setVisibility = function (visibility) {
+                    for (let event of this.events.values()) {
+                        event.map.setVisibility(visibility);
+                    }
+                }.bind(obj);
             },
 
             addEvent(event) {                
@@ -100,6 +120,9 @@
                         } else {
                             this.marker.setIcon(this.normalIcon);
                         }
+                    },
+                    setVisibility(visibility) {
+                        this.marker.setVisibility(visibility);
                     }
                 };
                 
@@ -109,7 +132,7 @@
             changeCenter(zoomIn, location) {
                 if (!zoomIn) {
                     this.map.setZoom(7.7);
-                    this.map.setCenter({ lat: 31.4, lng: 35.2 });
+                    this.map.setCenter({ lat: 31.55, lng: 35.2 });
                 } else {
                     this.map.setZoom(9);
                     this.map.setCenter(location);
