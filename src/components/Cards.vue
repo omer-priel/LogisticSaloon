@@ -36,7 +36,8 @@
         },
 
         mounted() {
-            this.load();
+            this.groups = store.getters.getGroups;
+            
             this.addGroupsChanged(function() {
                 this.groups = store.getters.getGroups;
             }.bind(this));
@@ -46,10 +47,6 @@
 			...mapActions([
 				"addGroupsChanged"
                 ]),
-            
-            load() {
-                this.groups = store.getters.getGroups;
-            },
 
             sliceContent(content) {
                 content = content.slice(0, 50);

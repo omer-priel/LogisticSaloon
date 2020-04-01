@@ -333,11 +333,11 @@ export default new Vuex.Store({
 
                     state.groups = sortGroups;
 
-                    state.groupsChanged.run();
-
                     state.changeMapCenter(false, null);
                 }
             }
+
+            state.groupsChanged.run();
         },
         
         openEvent(state, args) {

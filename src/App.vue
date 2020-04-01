@@ -49,7 +49,6 @@
 			this.load([this.$refs.eventModal.show, this.$refs.map.changeCenter]);
 			this.$refs.navbar.load();
 			this.$refs.map.load();
-			this.$refs.cards.load();
 		},
 
 		methods: {
