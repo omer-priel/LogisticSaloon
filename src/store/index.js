@@ -326,11 +326,7 @@ export default new Vuex.Store({
                         sortGroups.set(group.title, sortGroup);
                     }
 
-                    console.log(state.groups);
-
                     state.groups = sortGroups;
-
-                    console.log(state.groups);
 
                     state.changeMapCenter(false, null);
                 }
