@@ -1,5 +1,5 @@
 <template>
-<body id="App">
+<body id="App" @click="click">
 	<main>
 		<Navbar ref="navbar" v-model="mode"/>
 		<div cols="4" class="slidbar" >
@@ -50,6 +50,11 @@
 			this.$refs.navbar.load();
 			this.$refs.map.load();
 
+			let splits = document.querySelectorAll(".dropdown-toggle-split");
+			for (let i = 0; i < splits.length; i++) {
+				splits[i].addEventListener("click", this.click);
+			}
+
 			this.sortByTypes();
 		},
 
@@ -61,7 +66,17 @@
 			
 			changeMode() {
 				this.mode = !this.mode;
-			}
+			},
+
+			click(e) {
+				let modals = document.querySelectorAll(".modal");
+				for (let i = 0; i < modals.length; i++) {
+					if ( modals[i] == e.target || modals[i].contains(e.target)) {
+						return;
+					}
+				}
+				this.$refs.eventModal.hide();
+			},
 		}
 	};
 </script>
