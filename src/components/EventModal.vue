@@ -37,6 +37,8 @@
         name: "EventModal",
         data() {
             return {
+                showAfterHide: null,
+
                 event: null,
 
                 from: "",
@@ -46,14 +48,18 @@
             };
         },
         mounted() {
-            this.event = store.getters.getEventTemplet;
+
         },
         methods: {
 
-            show(event) {
-                this.event = event;
+            show(event) {                
+                this.showAfterHide = this.showEvent.bind(this, event);
+            },
 
-                this.from = event.data.from;
+            showEvent(event) {
+                this.event = event;
+                    
+                this.from = this.event.data.from;
 
                 let hours = this.event.data.date.getHours();
                 if (hours < 10) {
@@ -67,16 +73,25 @@
 
                 this.time = `${hours}:${minutes}`;
 
-                this.content = event.data.content;
-                this.link = event.data.link;
+                this.content = this.event.data.content;
+                this.link = this.event.data.link;
 
-                event.map.changeIcon(true);
+                this.event.map.changeIcon(true);
 
                 $("#eventModal").modal('show');
-                $('#eventModal').on('hidden.bs.modal', function (e) {
-                    event.map.changeIcon(false);
-                });
             },
+
+            hide() {
+                if (this.event) {
+                    this.event.map.changeIcon(false);
+                }
+                if (this.showAfterHide) {
+                    this.showAfterHide();
+                    this.showAfterHide = null;
+                } else {
+                    $("#eventModal").modal('hide');
+                }
+            }
         }
     }
 </script>

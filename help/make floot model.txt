@@ -1,8 +1,0 @@
-make modal absolute:
-.modal {
-    position: absolute;
-    left: 30%;
-    width: 40%;
-}
-
-and change "div.modal-backdrop"
