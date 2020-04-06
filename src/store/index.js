@@ -6,7 +6,7 @@ import CustomEvent from '../js/CustomEvent';
 
 Vue.use(Vuex)
 
-function createEvent(data, colorId) {
+function createEvent(data, typeId) {
     //make clone
     data = {...data};
     
@@ -17,7 +17,7 @@ function createEvent(data, colorId) {
 
         // data fields
         data: data,
-        colorId: colorId,
+        typeId: typeId,
         visibility: true,
 
         //groups
@@ -39,7 +39,7 @@ function createEvent(data, colorId) {
 function createGroup(map, title, fiels = {}) {
     let group = {
         title: title,
-        colorId: map.size,
+        id: map.size,
         events: new Map(),
         setVisibility(visibility) {
             for (let event of this.events.values()) {
@@ -240,7 +240,7 @@ export default new Vuex.Store({
                 let eventType = eventData.event_type;
                 let groupByType = state.groupsByTypes.get(eventType);
                 
-                let event = createEvent(eventData, groupByType.colorId);
+                let event = createEvent(eventData, groupByType.id);
                 let eventId = event.data.id;
                 
                 // save the event
@@ -327,7 +327,8 @@ export default new Vuex.Store({
                         }
 
                         for (let event of group.events.values()) {
-                            territorials[event.territorial.colorId].set(event.id, event);
+                            console.log(event.territorial.id);
+                            territorials[event.territorial.id].set(event.id, event);
                         }
 
                         for (let i = 0; i < state.territorials.length; i++) {
@@ -342,6 +343,22 @@ export default new Vuex.Store({
                     state.groups = sortGroups;
 
                     state.changeMapCenter(false, null);
+
+                    /**
+                     * 
+                        for (let i = 0; i < state.territorials.length; i++) {
+                            for (let event of territorials[i].values()) {
+                                sortGroup.events.set(event.id, event);
+                            }
+                        }
+
+                        sortGroups.set(group.title, sortGroup);
+                    }
+
+                    state.groups = sortGroups;
+
+                    state.changeMapCenter(false, null);
+                     */
                 }
             }
 

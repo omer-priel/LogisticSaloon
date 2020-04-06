@@ -2,7 +2,7 @@
     <div>
         <b-card no-body v-for="(group, groupIndex) in groups.values()" :key="group.title">
             <b-card-header class="p-1">
-                <b-button block :variant="'group-' + group.colorId" v-b-toggle="'group-' + groupIndex">{{ group.title }}</b-button>
+                <b-button block :variant="'group-' + group.id" v-b-toggle="'group-' + groupIndex">{{ group.title }}</b-button>
             </b-card-header>
             <b-collapse accordion="groups" :id="'group-' + groupIndex">
                 <b-card-body>

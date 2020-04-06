@@ -73,9 +73,9 @@
                     lng: event.data.location.lng + 0.06
                 };
 
-                let normalIconUrl = require('../assets/img/bubble-' + event.colorId + '.png');
+                let normalIconUrl = require('../assets/img/bubble-' + event.typeId + '.png');
                 let normalIcon = new H.map.Icon(normalIconUrl);
-                let selectedIconUrl = require('../assets/img/bubble-' + event.colorId + '-selected.png');
+                let selectedIconUrl = require('../assets/img/bubble-' + event.typeId + '-selected.png');
                 let selectedIcon = new H.map.Icon(selectedIconUrl);
 
                 let markerOptions = {

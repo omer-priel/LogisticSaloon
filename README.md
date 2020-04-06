@@ -25,7 +25,7 @@ group: {
     
     title: String
     
-    colorId: Number
+    id: Number
     events: Map<eventId, event>
 
 }
@@ -35,6 +35,6 @@ event: {
     id: Number
     
     data: eventData
-    colorId: Number
+    typeId: Number
     map: {}
 }

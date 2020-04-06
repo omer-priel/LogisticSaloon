@@ -54,7 +54,7 @@
                     let colors = store.getters.getColors;
 
                     for (const group of groups) {                    
-                        let color = colors[group.colorId];
+                        let color = colors[group.id];
                                                 
                         let count = 0;
 
@@ -104,7 +104,7 @@
 
                         territorial.events.forEach(function(event) {
                             if (event.visibility) {
-                                datacollection.datasets[0].data[event.eventType.colorId]++;
+                                datacollection.datasets[0].data[event.eventType.id]++;
                             }
                         });
 
