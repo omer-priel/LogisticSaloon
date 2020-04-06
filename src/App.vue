@@ -15,6 +15,7 @@
 </template>
 
 <script>
+
 	import { mapActions } from "vuex";
 
 	import Map from "./components/Map.vue";
@@ -35,6 +36,7 @@
 
 		data() {
 			return {
+				res: false,
 				mode: true,
 			};
 		},

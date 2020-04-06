@@ -3,13 +3,13 @@ const fs = require("fs");
 class Events {
     constructor() {
         this.folder = null;
-        this.typeEvents = [];
+        this.eventTypes = [];
         this.events = [];
     }
 
     load(folder) {
         this.folder = folder;
-        this.typeEvents = JSON.parse(fs.readFileSync(`${this.folder}/event_types.json`));
+        this.eventTypes = JSON.parse(fs.readFileSync(`${this.folder}/event_types.json`));
 
         let eventsFiles = fs.readdirSync(`${this.folder}/events`);
         
@@ -23,7 +23,7 @@ class Events {
 
     getAll() {
         return {
-            typeEvents: this.typeEvents,
+            eventTypes: this.eventTypes,
             events: this.events,
         };
     }

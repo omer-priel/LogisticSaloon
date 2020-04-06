@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { stat } from 'fs';
 
 import CustomEvent from '../js/CustomEvent';
 
@@ -52,114 +51,13 @@ function createGroup(map, title, fiels = {}) {
     map.set(title, group);
 }
 
-function random(min, max) {
-    max++;
-    return Math.floor(Math.random() * (max - min) ) + min;
-}
-
 export default new Vuex.Store({
     state: {
         // from the server
-        eventTypes: [
-            "הסלמה בדרום",
-            "רצועת עזה",
-            "תקיפה בסוריה",
-            "עימותים ברצועת עזה",
-            "טרור העפיפונים ובלוני התבערה",
-        ],
+        eventTypes: [],
 
         // from the server
-        eventsData: [
-            {
-                event: {
-                    id: 0,
-                    link:
-                        "https://www.hamal.co.il/post/-Le3Soja2sYlS7gZ17nz",
-                    content: "מטח רקטות שוגר לעבר באר שבע",
-                    event_type: "הסלמה בדרום",
-                    location: {
-                        lat: 31.313430926637704,
-                        lng: 34.5967077351318
-                    }
-                }
-            },
-            {
-                event: {
-                    id: 1,
-                    link:
-                        "https://www.hamal.co.il/post/-Laqlj7WosEV8BKPV3NY",
-                    content:
-                        "הפסקות חשמל במספר יישובים המועצה האזורית שער הנגב",
-                    event_type: "הסלמה בדרום",
-                    location: {
-                        lat: 31.525942837952083,
-                        lng: 34.59669981017577
-                    }
-                }
-            },
-            {
-                event: {
-                    id: 2,
-                    link:
-                        "https://www.hamal.co.il/post/-LgOmzUeECDM3rxL3kwf",
-                    content:
-                        "דיווח ראשוני על שיגור כושל מצפון רצועת עזה לעבר שטח ישראל. לפי הדיווח, הרקטה נחתה בים",
-                    event_type: "רצועת עזה",
-                    location: {
-                        lat: 32.05020128541517,
-                        lng: 34.75984151911165
-                    }
-                }
-            },
-            {
-                event: {
-                    id: 3,
-                    link: "https://www.hamal.co.il/post/-LncRYo2P--63J2Y6bZD",
-                    content: "הפנטגון אישר הערב שארצות הברית תקפה פעילי אל-קאעדה במחוז אידליב שבצפון-מערב סוריה, בה נהרגו לפחות 40 פעילים מפגיעת טילים. זאת לאחר ראמי עבד אל-רחמן, העומד בראש הארגון הסורי לזכויות אדם, הודיע כי \"תקיפת טילים כוונה נגד התכנסות שנערכה על ידי מנהיגי חוראס אל-דין, אנסאר אל-תאוויד וארגונים נוספים בתוך מחנה האימונים\".",
-                    event_type: "תקיפה בסוריה",
-                    location: {
-                        lat: 33.268782877555715,
-                        lng: 35.687669976351636
-                    }
-                }
-            },
-            {
-                event: {
-                    id: 4,
-                    link: "https://www.hamal.co.il/post/-LW1qTNj-HJdy6XrzSSy",
-                    content: "אבו עביידה: \" האוייב צריך להיות מודאג מאוד שאוצר המידע שקיבלנו יתן לנו עליונות אסטרטגית במלחמת המוחות. עזה היא ארץ אסורה לאוייב הציוני\"",
-                    event_type: "רצועת עזה",
-                    location: {
-                        lat: 32.0492021002358,
-                        lng: 34.76006502911327
-                    }
-                }
-            },
-            {
-                event: {
-                    id: 5,
-                    link: "https://www.hamal.co.il/post/-L_IrQ33K92yvXfy7egc",
-                    content: "דיווח ערבי: מטענים נזרקו לעבר כוחות צה\"ל בגבול רצועת עזה, צה\"ל הגיב בירי",
-                    event_type: "עימותים ברצועת עזה",
-                    location: {
-                        lat: 31.335510197502746,
-                        lng: 34.62111727462318
-                    }
-                }
-            },
-            {
-                event: {
-                    id: 9,
-                    link: "https://www.hamal.co.il/post/-LaU1bH_fwn3p66sy0Q3",
-                    content: "פלסטינים בהכנות לשיגור בלונים לעבר העוטף",
-                    event_type: "טרור העפיפונים ובלוני התבערה",
-                    location: {
-                        lat: 31.335462710203792,
-                        lng: 34.39537703542182
-                    }
-                }
-            }
-        ],
+        eventsData: [],
 
         colors: [
             "#26c485",
@@ -210,9 +108,11 @@ export default new Vuex.Store({
     },
     mutations: {
         load(state, args) {
-
             let showEventModal = args[0];
             let changeMapCenter = args[1];
+
+            state.showEventModal = showEventModal;
+            state.changeMapCenter = changeMapCenter;
 
             state.territorials.forEach(territorial => {
                 createGroup(state.groupsByTerritorials, territorial.title, {
@@ -227,14 +127,7 @@ export default new Vuex.Store({
 
             for (let i = 0; i < state.eventsData.length; i++) {
 
-                // Temporary: not need ".event"
-                // Temporary: nead form jsons
-                let eventData = state.eventsData[i].event;
-                
-                // Temporary: need to get from the jsons.
-                eventData.from = `יחידה ${random(100, 9999)}`
-                // Temporary: create random date
-                eventData.date = random(1000000000000, 2000000000000);
+                let eventData = state.eventsData[i];
 
                 // create the event
                 let eventType = eventData.event_type;
@@ -259,9 +152,6 @@ export default new Vuex.Store({
                     }
                 }
             }
-
-            state.showEventModal = showEventModal;
-            state.changeMapCenter = changeMapCenter;
         },
 
 

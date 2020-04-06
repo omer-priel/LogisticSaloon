@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import axios from "axios";
 
 import Bootstrap from 'bootstrap/dist/js/bootstrap.min';
 import BootstrapVue from 'bootstrap-vue';
@@ -18,8 +19,13 @@ Vue.use(BootstrapVue);
 
 Vue.config.productionTip = false;
 
-new Vue({
-    el: 'body',
+let app = new Vue({
     store,
     render: function (h) { return h(App) }
+});
+
+axios.post("http://localhost/events").then(function(res) {
+    store.state.eventTypes = res.data.eventTypes;
+    store.state.eventsData = res.data.events;
+    app.$mount("body");
 });
