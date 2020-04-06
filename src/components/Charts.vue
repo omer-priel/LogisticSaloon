@@ -79,7 +79,7 @@
                         datacollection: datacollection
                     });
                 } else {
-                    let territorials = store.getters.groupsByTerritorials.values();
+                    let territorials = store.getters.getGroupsByTerritorials.values();
                     let colors = store.getters.getColors;
                     let eventTypes = store.getters.getEventTypes;
 

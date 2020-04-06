@@ -327,7 +327,6 @@ export default new Vuex.Store({
                         }
 
                         for (let event of group.events.values()) {
-                            console.log(event.territorial.id);
                             territorials[event.territorial.id].set(event.id, event);
                         }
 
