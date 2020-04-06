@@ -21,6 +21,7 @@ Vue.use(VueHead);
 Vue.config.productionTip = false;
 
 new Vue({
+    el: 'body',
     store,
     render: function (h) { return h(App) }
-}).$mount('#app')
+});

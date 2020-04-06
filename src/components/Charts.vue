@@ -1,7 +1,10 @@
 <template>
     <div>
-        <b-jumbotron class="chart-box" bg-variant="light">
-            <PieChart :chart-data="datacollection"/>
+        <b-jumbotron class="chart-box" bg-variant="light">            
+            <div>
+                <h5 class="text-center">title</h5>
+                <PieChart class="pie" :height="height" :chart-data="datacollection" />
+            </div>
         </b-jumbotron>
     </div>
 </template>
@@ -9,7 +12,7 @@
 <script>
     import store from "../store";
     
-    import PieChart from "../assets/js/PieChart.js";
+    import PieChart from "../js/PieChart/PieChart.js";
 
     export default {
         components: {
@@ -20,7 +23,8 @@
                 datacollection: {
                     labels: [],
                     datasets: [],
-                }
+                },
+                height: 400, // 400 or 170 for 3 parts
             };
         },
         mounted() {
@@ -32,6 +36,7 @@
                     labels: [],
                     datasets: [
                         {
+                            borderAlign: "center",
                             label: "גרף מידע",
                             backgroundColor: [],
                             data: [],
@@ -64,26 +69,12 @@
         margin-left: 60px;
     }
 
-    // old code
-    @mixin border-radius($radius) {
-        -webkit-border-radius: $radius;
-        -moz-border-radius: $radius;
-        -ms-border-radius: $radius;
-        border-radius: $radius;
+    .pie {
+        margin-bottom: 1px;
     }
 
-    @mixin shadow() {
-        -webkit-box-shadow: 10px 9px 65px -14px rgba(0, 0, 0, 0.75);
-        -moz-box-shadow: 10px 9px 65px -14px rgba(0, 0, 0, 0.75);
-        box-shadow: 10px 9px 65px -14px rgba(0, 0, 0, 0.75);
-    }
-    #Charts {
-        background-color: azure;
-    }
-    .chart-box-OLD {
-        @include border-radius(10px);
-        @include shadow();
-        max-width: 300px;
-        margin: 1cm auto;
+    h5 {
+        margin-top: 8;
+        margin-bottom: 0;
     }
 </style>

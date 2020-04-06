@@ -1,5 +1,5 @@
 <template>
-<body id="App" @click="click">
+<body @click="click">
 	<main>
 		<Navbar ref="navbar" v-model="mode"/>
 		<div cols="4" class="slidbar" >
