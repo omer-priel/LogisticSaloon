@@ -5,8 +5,6 @@
 // require packages
 let express = require("express");
 
-let logger = require("app/logger");
-
 // Setup router
 let router = express.Router({mergeParams: true});
 

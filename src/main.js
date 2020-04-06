@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import VueHead from 'vue-head';
 
 import Bootstrap from 'bootstrap/dist/js/bootstrap.min';
 import BootstrapVue from 'bootstrap-vue';
@@ -16,7 +15,6 @@ import store from './store';
 import './assets/sass/main.scss';
 
 Vue.use(BootstrapVue);
-Vue.use(VueHead);
 
 Vue.config.productionTip = false;
 

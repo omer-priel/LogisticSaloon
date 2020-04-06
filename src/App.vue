@@ -33,12 +33,6 @@
 			EventModal,
 		},
 
-		head: {
-			title: {
-				inner: "Logistic Saloon"
-			}
-		},
-
 		data() {
 			return {
 				mode: true,
@@ -53,6 +47,10 @@
 			let splits = document.querySelectorAll(".dropdown-toggle-split");
 			for (let i = 0; i < splits.length; i++) {
 				splits[i].addEventListener("click", this.click);
+			}
+
+			window.onload = function(){
+				document.head.querySelector("title").innerHTML = "Logistic Saloon";
 			}
 
 			this.sortByTypes();
