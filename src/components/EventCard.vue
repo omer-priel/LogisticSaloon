@@ -31,7 +31,7 @@
             ]),
             
             sliceContent(content) {
-                content = content.slice(0, 50);
+                content = content.slice(0, 45);
                 let end = content.lastIndexOf(" ");
                 return content.slice(0, end);
             },

@@ -198,9 +198,6 @@ export default new Vuex.Store({
                     for (let group of state.groupsByTypes.values()) {
                         group.setVisibility(true);
                     }
-
-                    state.changeMapCenter(false, null);
-
                 } else { // sort Territorial
                     for (let territorial of state.groupsByTerritorials.values()) {
                         territorial.setVisibility(true);
