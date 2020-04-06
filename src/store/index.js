@@ -220,15 +220,10 @@ export default new Vuex.Store({
                 });
             });
 
-            let newEventTypes = new Map();
-
             for (let i = 0; i < state.eventTypes.length; i++) {
                 let eventType = state.eventTypes[i];
-                newEventTypes.set(i, eventType);
                 createGroup(state.groupsByTypes, eventType);
             }
-
-            state.eventTypes = newEventTypes;
 
             for (let i = 0; i < state.eventsData.length; i++) {
 
@@ -350,7 +345,7 @@ export default new Vuex.Store({
                 }
             }
 
-            state.groupsChanged.run();
+            state.groupsChanged.run(sortBy, filterTitle);
         },
         
         openEvent(state, args) {
@@ -429,21 +424,5 @@ export default new Vuex.Store({
         getEvents(state) {
             return state.events;
         },
-
-        getEventTemplet(state) {
-            let templet = {
-                id: 0,
-                    link: "",
-                    content: "",
-                    event_type: "",
-                    from: "",
-                    date: 0,
-                    location: {
-                        lat: 0,
-                        lng: 0
-                    }
-            }
-            return createEvent(templet, 0);
-        }
     }
 });

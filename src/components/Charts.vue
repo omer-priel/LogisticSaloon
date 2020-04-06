@@ -1,62 +1,124 @@
 <template>
     <div>
         <b-jumbotron class="chart-box" bg-variant="light">            
-            <div>
-                <h5 class="text-center">title</h5>
-                <PieChart class="pie" :height="height" :chart-data="datacollection" />
-            </div>
+            <Chart v-for="chart in charts" :key="chart.key" :height="(charts.length == 1) ? 400 : 170" :chart="chart"/>
         </b-jumbotron>
     </div>
 </template>
 
 <script>
+
+    import { mapActions } from "vuex";
+    
     import store from "../store";
     
-    import PieChart from "../js/PieChart/PieChart.js";
+    import Chart from "./Chart";
 
     export default {
         components: {
-            PieChart
+            Chart
         },
         data() {
             return {
-                datacollection: {
-                    labels: [],
-                    datasets: [],
-                },
-                height: 400, // 400 or 170 for 3 parts
+                charts: [ ],
+                key: 0,
             };
         },
         mounted() {
-            this.fillData();
+            this.addGroupsChanged(this.groupsChanged.bind(this));
         },
         methods: {
-            fillData() {
-                let datacollection = {
-                    labels: [],
-                    datasets: [
-                        {
-                            borderAlign: "center",
-                            label: "גרף מידע",
-                            backgroundColor: [],
-                            data: [],
+            ...mapActions([
+				"addGroupsChanged"
+            ]),
+
+            groupsChanged(sortBy, filterTitle) {
+                let charts = [];
+
+                if (sortBy == "types" || filterTitle) {
+                    if (sortBy == "types") {
+                        filterTitle = null;
+                    }
+                    let datacollection = {
+                        labels: [],
+                        datasets: [
+                            {
+                                label: "גרף",
+                                backgroundColor: [],
+                                data: [],
+                            }
+                        ]
+                    };
+                    
+                    let groups = store.getters.getGroupsByTypes.values();
+                    let colors = store.getters.getColors;
+
+                    for (const group of groups) {                    
+                        let color = colors[group.colorId];
+                                                
+                        let count = 0;
+
+                        if (sortBy == "types") {
+                            count = group.events.size;
+                        } else {
+                            group.events.forEach(function(event) {
+                                if (event.visibility) {
+                                    count++;
+                                }
+                            });
                         }
-                    ]
-                };
-                
-                let groupsByTypes = store.getters.getGroupsByTypes.values();
-                let colors = store.getters.getColors;
 
-                for (const group of groupsByTypes) {                    
-                    let color = colors[group.colorId];
-                    let count = group.events.size;
+                        datacollection.labels.push(group.title);
+                        datacollection.datasets[0].backgroundColor.push(color);
+                        datacollection.datasets[0].data.push(count);
+                    }
 
-                    datacollection.labels.push(group.title);
-                    datacollection.datasets[0].backgroundColor.push(color);
-                    datacollection.datasets[0].data.push(count);
+                    charts.push({
+                        title: filterTitle,
+                        key: this.key + "-" + charts.length,
+                        datacollection: datacollection
+                    });
+                } else {
+                    let territorials = store.getters.groupsByTerritorials.values();
+                    let colors = store.getters.getColors;
+                    let eventTypes = store.getters.getEventTypes;
+
+                    for (const territorial of territorials) {         
+                        let datacollection = {
+                            labels: [],
+                            datasets: [
+                                {
+                                    label: "גרף",
+                                    backgroundColor: [],
+                                    data: [],
+                                }
+                            ]
+                        };
+                        
+                        eventTypes.forEach(function(eventType, index) {
+                            let color = colors[index];
+                            datacollection.labels.push(eventType);
+                            datacollection.datasets[0].backgroundColor.push(color);
+                            datacollection.datasets[0].data.push(0);
+                        });
+
+                        territorial.events.forEach(function(event) {
+                            if (event.visibility) {
+                                datacollection.datasets[0].data[event.eventType.colorId]++;
+                            }
+                        });
+
+                        charts.push({
+                            title: territorial.title,
+                            key: this.key + "-" + charts.length,
+                            datacollection: datacollection
+                        });
+                    }
                 }
 
-                this.datacollection = datacollection;
+                this.key++;
+
+                this.charts = charts;
             },
         }
     };
@@ -64,17 +126,9 @@
 
 <style lang="scss" scoped>
     .chart-box {
+        min-height: 500px;
         max-width: 80%;
         padding: 16px;
         margin-left: 60px;
-    }
-
-    .pie {
-        margin-bottom: 1px;
-    }
-
-    h5 {
-        margin-top: 8;
-        margin-bottom: 0;
     }
 </style>

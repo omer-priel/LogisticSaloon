@@ -3,8 +3,8 @@
 	<main>
 		<Navbar ref="navbar" v-model="mode"/>
 		<div cols="4" class="slidbar" >
-			<Cards ref="cards" v-if="mode" />
-			<Charts v-else />
+			<Cards ref="cards" style="max-height: 0px;" :class="(mode) ? '' : 'invisible'" />
+			<Charts :class="(!mode) ? '' : 'invisible'" />
 		</div>
 		<Map ref="map" class="max_height" />
 	</main>
