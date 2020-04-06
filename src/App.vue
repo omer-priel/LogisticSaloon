@@ -68,6 +68,7 @@
 				this.mode = !this.mode;
 			},
 
+			//events
 			click(e) {
 				let modals = document.querySelectorAll(".modal");
 				for (let i = 0; i < modals.length; i++) {

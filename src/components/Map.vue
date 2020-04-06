@@ -61,6 +61,10 @@
             ]),
 
             load() {
+                window.addEventListener('resize', function () {
+    			    this.map.getViewPort().resize(); 
+			    }.bind(this));
+
                 let events = store.getters.getEvents;
                 for (let event of events.values()) {
                     this.addEvent(event);
