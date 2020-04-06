@@ -5,7 +5,7 @@
                 <b-button block :variant="'group-' + group.id" v-b-toggle="'group-' + groupIndex">{{ group.title }}</b-button>
             </b-card-header>
             <b-collapse accordion="groups" :id="'group-' + groupIndex">
-                <b-card-body>
+                <b-card-body class="scroll">
                     <EventCard v-for="event in group.events.values()" :key="event.id" :eventIn.sync="event" />
                 </b-card-body>
             </b-collapse>
@@ -70,10 +70,16 @@
     
     @import '../assets/sass/_custom.scss';
 
+    .scroll {
+        overflow-y:scroll;
+        position:relative;
+        max-height:450px;
+    }
+
     .card {
         background-color: #ffffff00;
         border: none;
-        
+
         .card-header {
            border: none;
         }
