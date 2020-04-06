@@ -25,6 +25,9 @@ require("./system");
 
 console.log("Setup the Server...");
 
+const events = require("./core/events");
+events.load("saves");
+
 // setup the app
 let app = express();
 
