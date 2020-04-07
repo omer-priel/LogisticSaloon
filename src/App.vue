@@ -52,9 +52,19 @@
 			}
 
 			window.onload = function(){
-				document.head.querySelector("title").innerHTML = "Logistic Saloon";
+				document.head.querySelector("title").innerHTML = "Logistic Saloon";	
 			}
 
+			window.setInterval(function() {
+				let scrolls = document.querySelectorAll(".scroll");
+				for (let i = 0; i < scrolls.length; i++) {
+					if (scrolls[i].scrollTop < scrolls[i].scrollHeight - 451) {
+						scrolls[i].scrollTop++;
+					} else {
+						scrolls[i].scrollTop = 0;
+					}
+				}
+			}, 25);
 			this.sortByTypes();
 		},
 
